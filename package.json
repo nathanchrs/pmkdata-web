@@ -4,13 +4,16 @@
   "private": true,
   "dependencies": {
     "react": "^15.6.1",
+    "react-addons-css-transition-group": "^15.6.0",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^4.0.8",
     "react-scripts": "1.0.10",
     "redux": "^3.7.1",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "semantic-ui-css": "^2.2.11",
+    "semantic-ui-react": "^0.71.0"
   },
   "scripts": {
     "start": "react-scripts start",

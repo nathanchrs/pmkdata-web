@@ -3,6 +3,9 @@
 # Sublime Text files
 *.sublime-*
 
+# IntelliJ IDEA files
+/.idea
+
 # dependencies
 /node_modules
 
