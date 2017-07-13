@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
     "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.6.0",
     "react-dom": "^15.6.1",
@@ -11,7 +12,9 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "1.0.10",
     "redux": "^3.7.1",
+    "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
+    "remove": "^0.1.5",
     "semantic-ui-css": "^2.2.11",
     "semantic-ui-react": "^0.71.0"
   },
@@ -20,5 +23,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:3000"
 }
