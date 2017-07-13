@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Container, Divider, Form, Header, Message, Segment } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 import { login } from '../services/session/actions';
 
-class Login extends Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = { username: '', password: '' };
@@ -25,6 +26,10 @@ class Login extends Component {
   }
 
   render() {
+    const { from: redirectLocation } = this.props.location.state || { from: { pathname: '/' } };
+    if (this.props.isAuthenticated) {
+      return <Redirect to={redirectLocation} />;
+    }
 
     let message = <Divider hidden />;
     if (this.props.failed) {
@@ -39,10 +44,13 @@ class Login extends Component {
           <Header size='huge' textAlign='center'>Login</Header>
           <Divider hidden />
           <Form>
-            <Form.Input label='Username' value={this.state.username} onChange={this.handleUsernameChanged} />
-            <Form.Input label='Password' type='password' value={this.state.password} onChange={this.handlePasswordChanged} />
+            <Form.Input label='Username' icon='user' iconPosition='left'
+                        value={this.state.username} onChange={this.handleUsernameChanged} />
+            <Form.Input label='Password' icon='lock' iconPosition='left' type='password'
+                        value={this.state.password} onChange={this.handlePasswordChanged} />
             {message}
-            <Button onClick={this.handleSubmit} primary fluid content='Login' icon='arrow right' labelPosition='right' />
+            <Button primary fluid content='Login' icon='arrow right' labelPosition='right'
+                    onClick={this.handleSubmit} />
           </Form>
         </Segment>
       </Container>
@@ -53,7 +61,8 @@ class Login extends Component {
 const mapStateToProps = state => {
   return {
     error: state.session.error,
-    failed: state.session.failed
+    failed: state.session.failed,
+    isAuthenticated: !!state.session.user
   };
 };
 

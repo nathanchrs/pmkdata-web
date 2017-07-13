@@ -1,11 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Route } from 'react-router-dom';
+import ProtectedRoute  from './components/ProtectedRoute';
+
 import Login from './scenes/Login';
+import Dashboard from './scenes/Dashboard';
 
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
-      <Login />
+      <div>
+        <ProtectedRoute exact path='/' component={Dashboard} />
+        <Route path='/login' component={Login} />
+      </div>
     );
   }
 }
