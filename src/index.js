@@ -4,7 +4,6 @@ import { compose, createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import { BrowserRouter as Router } from 'react-router-dom';
 import rootReducer from './services/reducer';
 import App from './App';
 import 'semantic-ui-css/semantic.min.css';
@@ -16,9 +15,7 @@ persistStore(store, { keyPrefix: 'pmkdata:' });
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <App />
   </Provider>,
   document.getElementById('root')
 );
