@@ -14,8 +14,10 @@
     "react-scripts": "1.0.10",
     "redux": "^3.7.1",
     "redux-actions": "^2.2.1",
+    "redux-api-middleware": "^1.0.3",
+    "redux-persist": "^4.8.2",
+    "redux-persist-transform-filter": "0.0.14",
     "redux-thunk": "^2.2.0",
-    "remove": "^0.1.5",
     "semantic-ui-css": "^2.2.11",
     "semantic-ui-react": "^0.71.0"
   },

@@ -10,7 +10,7 @@ HttpError.prototype = Object.create(Error.prototype);
 HttpError.prototype.constructor = HttpError;
 
 export async function fetchApi(url, method, body) {
-  let response = await fetch('/api/session', {
+  let response = await fetch(url, {
     method,
     credentials: 'include',
     headers: {
@@ -19,6 +19,13 @@ export async function fetchApi(url, method, body) {
     },
     body: JSON.stringify(body)
   });
-  if (!response.ok) throw new HttpError('Login failed.', response.status);
+  if (!response.ok) {
+    switch (response.status) {
+      //case 401:
+        // TODO: destroy persisted session. Problem: need to dispatch to clear session from Redux state
+      default:
+        throw new HttpError('HTTP request failed.', response.status);
+    }
+  }
   return response.json();
 }
