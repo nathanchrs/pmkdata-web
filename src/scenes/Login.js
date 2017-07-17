@@ -50,6 +50,7 @@ class Login extends React.Component {
                         value={this.state.password} onChange={this.handlePasswordChanged} />
             {message}
             <Button primary fluid content='Login' icon='arrow right' labelPosition='right'
+                    loading={ this.props.isFetching }
                     onClick={this.handleSubmit} />
           </Form>
         </Segment>
@@ -62,7 +63,8 @@ const mapStateToProps = state => {
   return {
     error: state.session.error,
     failed: state.session.failed,
-    isAuthenticated: !!state.session.user
+    isAuthenticated: !!state.session.user,
+    isFetching: state.session.isFetching
   };
 };
 
