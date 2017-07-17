@@ -7,7 +7,7 @@ import { login } from '../services/session/actions';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: '', password: '' };
+    this.state = { username: '', password: '', isFetching: false };
     this.handleUsernameChanged = this.handleUsernameChanged.bind(this);
     this.handlePasswordChanged = this.handlePasswordChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,8 +21,12 @@ class Login extends React.Component {
     this.setState({ password: event.target.value });
   }
 
-  handleSubmit(event) {
-    this.props.onSubmit(this.state.username, this.state.password);
+  async handleSubmit(event) {
+    if (!this.state.isFetching) {
+      this.state.isFetching = true;
+      await this.props.onSubmit(this.state.username, this.state.password);
+      this.setState({isFetching: false});
+    }
   }
 
   render() {
@@ -50,7 +54,7 @@ class Login extends React.Component {
                         value={this.state.password} onChange={this.handlePasswordChanged} />
             {message}
             <Button primary fluid content='Login' icon='arrow right' labelPosition='right'
-                    loading={ this.props.isFetching }
+                    loading={ this.state.isFetching }
                     onClick={this.handleSubmit} />
           </Form>
         </Segment>
@@ -64,13 +68,14 @@ const mapStateToProps = state => {
     error: state.session.error,
     failed: state.session.failed,
     isAuthenticated: !!state.session.user,
-    isFetching: state.session.isFetching
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: (username, password) => { dispatch(login(username, password)); }
+    onSubmit: (username, password) => {
+      return dispatch(login(username, password));
+    }
   };
 };
 

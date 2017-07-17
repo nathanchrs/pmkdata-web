@@ -14,7 +14,6 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "1.0.10",
     "redux": "^3.7.1",
-    "redux-actions": "^2.2.1",
     "redux-persist": "^4.8.2",
     "redux-persist-transform-filter": "0.0.14",
     "redux-thunk": "^2.2.0",

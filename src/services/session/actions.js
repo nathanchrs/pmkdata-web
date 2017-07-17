@@ -11,8 +11,8 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const CLEAR_SESSION = 'CLEAR_SESSION';
 
 export function login(username, password) {
-  return async (dispatch, getState) => {
-    if (getState().session.isFetching || getState().session.user) {
+  return (dispatch, getState) => {
+    if (getState().session.user) {
       return Promise.resolve();
     }
 
@@ -26,8 +26,8 @@ export function login(username, password) {
 }
 
 export function logout() {
-  return async (dispatch, getState) => {
-    if (getState().session.isFetching || !getState().session.user) {
+  return (dispatch, getState) => {
+    if (!getState().session.user) {
       return Promise.resolve();
     }
     return dispatch(createApiAction({
