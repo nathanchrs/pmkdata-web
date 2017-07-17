@@ -8,6 +8,8 @@ export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
+export const CLEAR_SESSION = 'CLEAR_SESSION';
+
 export function login(username, password) {
   return async (dispatch, getState) => {
     if (getState().session.isFetching || getState().session.user) {
@@ -34,4 +36,8 @@ export function logout() {
       types: [LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE]
     }));
   };
+}
+
+export function clearSession() {
+  return { type: CLEAR_SESSION };
 }
