@@ -7,7 +7,7 @@ import { login } from '../services/session/actions';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: '', password: '', isFetching: false };
+    this.state = { username: '', password: '', isFetching: false, failureMessage: null };
     this.handleFieldChanged = this.handleFieldChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -18,11 +18,28 @@ class Login extends React.Component {
     };
   }
 
-  async handleSubmit(event) {
+  async handleSubmit() {
     if (!this.state.isFetching) {
-      this.state.isFetching = true;
-      await this.props.onSubmit(this.state.username, this.state.password);
-      this.setState({isFetching: false});
+      this.setState({ isFetching: true });
+      let action = await this.props.onSubmit(this.state.username, this.state.password);
+
+      if (action.payload && action.error) {
+        if (action.payload.status === 422) {
+          this.setState({ failureMessage: 'Username atau password kosong atau tidak valid.' });
+        } else if (action.payload.status === 401) {
+          if (action.payload.response && action.payload.response.message === 'Account inactive.') {
+            this.setState({ failureMessage: 'Akun ini belum divalidasi oleh admin, coba beberapa saat lagi.' });
+          } else {
+            this.setState({ failureMessage: 'Username atau password salah.' });
+          }
+        } else {
+          this.setState({ failureMessage: 'Login gagal, coba beberapa saat lagi.' });
+        }
+      } else {
+        this.setState({ failureMessage: null });
+      }
+
+      this.setState({ isFetching: false });
     }
   }
 
@@ -32,13 +49,14 @@ class Login extends React.Component {
       return <Redirect to={redirectLocation} />;
     }
 
-    let message = <Divider hidden />;
+    let locationMessage = <Divider hidden />;
     if (this.props.history.location.state && this.props.history.location.state.message) {
-      message = <Message info visible>{this.props.history.location.state.message}</Message>;
-    } else if (this.props.failed) {
-      message = <Message warning visible>Username atau password salah, atau akun belum selesai divalidasi.</Message>;
-    } else if (this.props.error) {
-      message = <Message error visible>Login gagal, coba beberapa saat lagi.</Message>;
+      locationMessage = <Message info visible>{this.props.history.location.state.message}</Message>;
+    }
+
+    let failureMessage = <Divider hidden />;
+    if (this.state.failureMessage) {
+      failureMessage = <Message warning visible>{this.state.failureMessage}</Message>;
     }
 
     return (
@@ -51,7 +69,8 @@ class Login extends React.Component {
                         value={this.state.username} onChange={this.handleFieldChanged('username')} />
             <Form.Input label='Password' icon='lock' iconPosition='left' type='password'
                         value={this.state.password} onChange={this.handleFieldChanged('password')} />
-            {message}
+            {locationMessage}
+            {failureMessage}
             <Button primary fluid content='Login' icon='arrow right' labelPosition='right'
                     loading={this.state.isFetching}
                     onClick={this.handleSubmit} />
