@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Container, Divider, Form, Header, Message, Segment } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-import { register } from '../services/users/actions';
+import { register } from '../../services/users/actions';
 
 class Register extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { nim: '', email: '', username: '', password: '', isFetching: false };
+    this.state = { nim: '', email: '', username: '', password: '', isFetching: false, error: false };
     this.handleFieldChanged = this.handleFieldChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -18,18 +18,25 @@ class Register extends React.Component {
     };
   }
 
-  async handleSubmit(event) {
+  async handleSubmit() {
+    let data = {
+      nim: this.state.nim,
+      email: this.state.email,
+      username: this.state.username,
+      password: this.state.password
+    };
+
     if (!this.state.isFetching) {
-      // TODO: validation
       this.state.isFetching = true;
-      let action = await this.props.onSubmit(
-        this.state.nim, this.state.email, this.state.username, this.state.password
-      );
+      let action = await this.props.onSubmit(data);
       if (!action.error) {
         this.props.history.push( {
           pathname: '/login',
           state: { message: 'Pendaftaran berhasil - akun akan divalidasi terlebih dahulu oleh admin.' }
         });
+        this.setState({ error: false });
+      } else {
+        this.setState({ error: true });
       }
       this.setState({ isFetching: false });
     }
@@ -42,7 +49,7 @@ class Register extends React.Component {
     }
 
     let message = <Divider hidden />;
-    if (this.props.error) {
+    if (this.state.error) {
       message = <Message error visible>Pendaftaran gagal, coba beberapa saat lagi.</Message>;
     }
 
@@ -73,15 +80,14 @@ class Register extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.users.error,
-    isAuthenticated: !!state.session.user,
+    isAuthenticated: !!state.session.user
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: (nim, email, username, password) => {
-      return dispatch(register(nim, email, username, password));
+    onSubmit: (data) => {
+      return dispatch(register(data));
     }
   };
 };

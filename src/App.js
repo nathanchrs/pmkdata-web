@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import ProtectedRoute  from './components/ProtectedRoute';
-import Login from './scenes/Login';
-import Register from './scenes/Register';
+import Login from './scenes/session/Login';
+import Register from './scenes/users/Register';
 import Dashboard from './scenes/Dashboard';
 
 

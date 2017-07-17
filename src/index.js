@@ -14,7 +14,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 const store = createStore(
   rootReducer, undefined, compose(
-    applyMiddleware(apiErrorHandlerMiddleware, apiMiddleware, thunkMiddleware),
+    applyMiddleware(thunkMiddleware, apiMiddleware, apiErrorHandlerMiddleware,),
     autoRehydrate()
   )
 );

@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Container, Divider, Form, Header, Message, Segment } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-import { login } from '../services/session/actions';
+import { login } from '../../services/session/actions';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: '', password: '', isFetching: false, failureMessage: null };
+    this.state = { username: '', password: '', isFetching: false, failureMessage: null, validationError: null };
     this.handleFieldChanged = this.handleFieldChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFailure = this.handleFailure.bind(this);
   }
 
   handleFieldChanged(field) {
@@ -19,28 +20,43 @@ class Login extends React.Component {
   }
 
   async handleSubmit() {
+    let data = {
+      username: this.state.username,
+      password: this.state.password
+    };
+
     if (!this.state.isFetching) {
       this.setState({ isFetching: true });
-      let action = await this.props.onSubmit(this.state.username, this.state.password);
 
-      if (action.payload && action.error) {
-        if (action.payload.status === 422) {
-          this.setState({ failureMessage: 'Username atau password kosong atau tidak valid.' });
-        } else if (action.payload.status === 401) {
-          if (action.payload.response && action.payload.response.message === 'Account inactive.') {
-            this.setState({ failureMessage: 'Akun ini belum divalidasi oleh admin, coba beberapa saat lagi.' });
-          } else {
-            this.setState({ failureMessage: 'Username atau password salah.' });
-          }
-        } else {
-          this.setState({ failureMessage: 'Login gagal, coba beberapa saat lagi.' });
-        }
+      let action = await this.props.onSubmit(data);
+      if (action.error) {
+        this.handleFailure(action);
       } else {
-        this.setState({ failureMessage: null });
+        this.setState({ failureMessage: null, validationError: null });
       }
 
       this.setState({ isFetching: false });
     }
+  }
+
+  handleFailure(action) {
+    if (action.payload) {
+      if (action.payload.name === 'ValidationError') {
+        return this.setState({
+          failureMessage: 'Username atau password kosong atau tidak valid.',
+          validationError: action.payload
+        });
+      }
+
+      if (action.payload.status === 401) {
+        if (action.payload.response && action.payload.response.message === 'Account inactive.') {
+          return this.setState({ failureMessage: 'Akun ini belum divalidasi oleh admin, coba beberapa saat lagi.' });
+        }
+        return this.setState({ failureMessage: 'Username atau password salah.' });
+      }
+    }
+
+    return this.setState({ failureMessage: 'Login gagal, coba beberapa saat lagi.' });
   }
 
   render() {
@@ -83,17 +99,13 @@ class Login extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.session.error,
-    failed: state.session.failed,
-    isAuthenticated: !!state.session.user,
+    isAuthenticated: !!state.session.user
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: (username, password) => {
-      return dispatch(login(username, password));
-    }
+    onSubmit: (data) => dispatch(login(data))
   };
 };
 
