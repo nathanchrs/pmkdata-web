@@ -72,7 +72,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       let action = await dispatch(register(values));
       if (action.error) {
         if (action.payload && action.payload.status === 409) {
-          throw new SubmissionError({ username: 'Username sudah terpakai' });
+          if (action.payload.response && action.payload.response.message === 'Username already exists.') {
+            throw new SubmissionError({ username: 'Username sudah terpakai' });
+          } else {
+            throw new SubmissionError({ nim: 'Sudah ada username yang terdaftar untuk NIM ini' });
+          }
         } else if (action.payload && action.payload.status === 422) {
           throw new SubmissionError({ _error: 'Terdapat input yang tidak valid' });
         }
