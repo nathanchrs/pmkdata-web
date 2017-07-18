@@ -18,7 +18,7 @@ const store = createStore(
     autoRehydrate()
   )
 );
-persistStore(store, { keyPrefix: 'pmkdata:' });
+persistStore(store, { keyPrefix: 'pmkdata:', blacklist: ['form'] });
 
 ReactDOM.render(
   <Provider store={store}>

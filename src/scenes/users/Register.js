@@ -28,6 +28,7 @@ class Register extends React.Component {
 
     if (!this.state.isFetching) {
       this.state.isFetching = true;
+
       let action = await this.props.onSubmit(data);
       if (!action.error) {
         this.props.history.push( {
@@ -36,8 +37,10 @@ class Register extends React.Component {
         });
         this.setState({ error: false });
       } else {
+        // TODO: proper error messages, input error highlighting
         this.setState({ error: true });
       }
+
       this.setState({ isFetching: false });
     }
   }

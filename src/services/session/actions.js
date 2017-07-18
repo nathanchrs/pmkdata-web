@@ -16,20 +16,10 @@ export function login(body) {
       return Promise.resolve();
     }
 
-    const schema = {
-      'type': 'object',
-      'properties': {
-        'username': { type: 'string', minLength: 1 },
-        'password': { type: 'string', minLength: 1 }
-      },
-      'required': ['username', 'password']
-    };
-
     return dispatch(createApiAction({
       endpoint: '/api/session',
       method: 'POST',
       body,
-      schema,
       types: [LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE]
     }));
   };
