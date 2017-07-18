@@ -11,7 +11,14 @@ class ControlledField  extends React.Component {
       error: meta.touched && meta.invalid,
       loading: meta.asyncValidating
     };
-    return React.createElement(this.props.component, actualComponentProps);
+    return (
+      <div style={{ marginBottom: '14px' }}>
+        {React.createElement(this.props.component, actualComponentProps)}
+        {actualComponentProps.error &&
+          <div style={{ marginTop: '-10px', fontSize: '0.8rem', color: '#9f3a38' }}>{meta.error}</div>
+        }
+      </div>
+    );
   };
 
   render() {

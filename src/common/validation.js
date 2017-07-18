@@ -16,9 +16,11 @@ function createValidator(schema) {
     if (isValid) {
       return {};
     } else {
-      const errors = {}
+      const errors = {};
       validate.errors.forEach((error) => {
-        errors[error.dataPath.split('/').filter(str => str)[0]] = error.message
+        let property = error.dataPath.split('/').filter(str => str)[0];
+        if (!property) property = '_error';
+        errors[property] = error.message
       });
       return errors;
     }

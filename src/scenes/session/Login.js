@@ -4,7 +4,7 @@ import { reduxForm, SubmissionError } from 'redux-form';
 import ControlledField from '../../components/ControlledField';
 import { createValidator } from '../../common/validation';
 import { Button, Container, Divider, Form, Header, Message, Segment } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { login } from '../../services/session/actions';
 
 class Login extends React.Component {
@@ -21,23 +21,21 @@ class Login extends React.Component {
       locationMessage = <Message info visible>{history.location.state.message}</Message>;
     }
 
-    let failureMessage = <Divider hidden />;
-    if (error) {
-      failureMessage = <Message warning visible>{error}</Message>;
-    }
-
     return (
       <Container style={{ width: '360px', marginTop: '16vh' }}>
         <Segment>
           <Header size='huge' textAlign='center'>Login</Header>
           <Divider hidden />
-          <Form onSubmit={handleSubmit(submitDispatcher)}>
+          <Form onSubmit={handleSubmit(submitDispatcher)} error={!!error}>
             <ControlledField name='username' label='Username' icon='user' iconPosition='left' />
             <ControlledField name='password' type='password' label='Password' icon='lock' iconPosition='left' />
             {locationMessage}
-            {failureMessage}
-            <Button as='button' type='submit' primary fluid content='Login' icon='arrow right' labelPosition='right'
-                    loading={submitting} disabled={ !!error || submitting } />
+            <Message error>{error}</Message>
+            <Button.Group fluid>
+              <Button as={Link} to='/register' content='Daftar' />
+              <Button as='button' type='submit' primary content='Login'
+                      loading={submitting} disabled={submitting} />
+            </Button.Group>
           </Form>
         </Segment>
       </Container>
@@ -45,30 +43,20 @@ class Login extends React.Component {
   }
 }
 
-function handleFailure(action) {
-  if (action.payload) {
-    if (action.payload.status === 422) {
-      throw new SubmissionError({ _error: 'Username atau password kosong atau tidak valid.' });
-    }
-
-    if (action.payload.status === 401) {
-      if (action.payload.response && action.payload.response.message === 'Account inactive.') {
-        throw new SubmissionError({ _error: 'Akun ini belum divalidasi oleh admin, coba beberapa saat lagi.' });
-      }
-      throw new SubmissionError({ _error: 'Username atau password salah.' });
-    }
-  }
-
-  throw new SubmissionError({ _error: 'Login gagal, coba beberapa saat lagi.' });
-}
-
 const schema = {
   'type': 'object',
   'properties': {
-    'username': { type: 'string', minLength: 1 },
-    'password': { type: 'string', minLength: 1 }
+    'username': { type: 'string' },
+    'password': { type: 'string' }
   },
-  'required': ['username', 'password']
+  'required': ['username', 'password'],
+  'errorMessage': {
+    'properties': {
+      'username': 'Username harus diisi',
+      'password': 'Password harus diisi'
+    },
+    '_': 'Username dan/atau password tidak valid'
+  }
 };
 
 const mapStateToProps = state => {
@@ -81,7 +69,22 @@ const mapDispatchToProps = dispatch => {
   return {
     submitDispatcher: async (values) => {
       let action = await dispatch(login(values));
-      if (action.error) handleFailure(action);
+      if (action.error) {
+        if (action.payload) {
+          if (action.payload.status === 422) {
+            throw new SubmissionError({ _error: 'Username atau password kosong atau tidak valid.' });
+          }
+
+          if (action.payload.status === 401) {
+            if (action.payload.response && action.payload.response.message === 'Account inactive.') {
+              throw new SubmissionError({ _error: 'Akun ini belum divalidasi oleh admin, coba beberapa saat lagi.' });
+            }
+            throw new SubmissionError({ _error: 'Username atau password salah.' });
+          }
+        }
+
+        throw new SubmissionError({ _error: 'Login gagal, coba beberapa saat lagi.' });
+      }
     }
   };
 };
