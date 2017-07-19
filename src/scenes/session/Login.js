@@ -22,7 +22,7 @@ class Login extends React.Component {
     }
 
     return (
-      <Container style={{ width: '360px', marginTop: '16vh' }}>
+      <Container style={{ width: '360px', paddingTop: '9vw' }}>
         <Segment>
           <Header size='huge' textAlign='center'>Login</Header>
           <Divider hidden />

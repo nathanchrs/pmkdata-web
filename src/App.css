@@ -1,0 +1,21 @@
+
+/* Global app styles */
+
+body {
+  background-color: #f7f7f7;
+}
+
+/* Fixes to be able to use menu with labels in a 'very thin' sidebar */
+
+.ui.labeled.icon.menu .item {
+  min-width: 80px;
+}
+
+.ui.left.sidebar[class*="very thin"] {
+  width: 80px;
+}
+
+.ui.visible.left.sidebar[class*="very thin"] ~ .fixed, .ui.visible.left.sidebar[class*="very thin"] ~ .pusher {
+  -webkit-transform: translate3d(80px, 0, 0);
+  transform: translate3d(80px, 0, 0);
+}

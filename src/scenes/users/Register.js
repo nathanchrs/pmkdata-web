@@ -18,7 +18,7 @@ class Register extends React.Component {
     }
 
     return (
-      <Container style={{ width: '360px', marginTop: '12vh' }}>
+      <Container style={{ width: '360px', paddingTop: '6vw' }}>
         <Segment>
           <Header size='huge' textAlign='center'>Daftar</Header>
           <Divider hidden />

@@ -7,8 +7,8 @@ import { apiMiddleware } from '@aftonbladet/redux-api-middleware';
 import apiErrorHandlerMiddleware from './services/apiErrorHandler';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import rootReducer from './services/reducer';
-import App from './App';
 import 'semantic-ui-css/semantic.min.css';
+import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 
