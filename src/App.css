@@ -15,7 +15,6 @@ body {
   width: 80px;
 }
 
-.ui.visible.left.sidebar[class*="very thin"] ~ .fixed, .ui.visible.left.sidebar[class*="very thin"] ~ .pusher {
-  -webkit-transform: translate3d(80px, 0, 0);
-  transform: translate3d(80px, 0, 0);
+.ui.visible.overlay.sidebar ~ .fixed, .ui.visible.overlay.sidebar ~ .pusher {
+  margin-left: 80px;
 }

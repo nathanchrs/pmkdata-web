@@ -10,7 +10,7 @@ class AppLayout extends React.Component {
     const { isSupervisor, section } = this.props;
     return (
       <Sidebar.Pushable>
-        <Sidebar as={Menu}  borderless animation='slide along' width='very thin' visible vertical inverted icon='labeled' size='tiny'>
+        <Sidebar as={Menu}  borderless animation='overlay' width='very thin' visible vertical inverted icon='labeled' size='tiny'>
           <br />
           <Menu.Item header><img src={pmkLogo} alt='PMK ITB logo' /><br /><br />PMK ITB</Menu.Item>
 
