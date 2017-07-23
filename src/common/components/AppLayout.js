@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Container, Divider, Icon, Menu, Sidebar } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { logout } from '../services/session/actions';
-import pmkLogo from'../common/pmklogo.png';
+import { logout } from '../../services/session/actions';
+import pmkLogo from'../resources/pmklogo.png';
 
 class AppLayout extends React.Component {
   render() {

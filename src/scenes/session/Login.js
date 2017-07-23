@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, SubmissionError } from 'redux-form';
-import ControlledField from '../../components/ControlledField';
+import ControlledField from '../../common/components/ControlledField';
 import { createValidator } from '../../common/validation';
 import { Button, Container, Divider, Form, Header, Message, Segment } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';

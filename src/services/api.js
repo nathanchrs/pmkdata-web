@@ -1,4 +1,5 @@
-import { CALL_API } from '@aftonbladet/redux-api-middleware';;
+import { CALL_API } from '@aftonbladet/redux-api-middleware';
+import qs from 'qs';
 
 export function createApiAction(options) {
   const defaultOptions = {
@@ -14,6 +15,14 @@ export function createApiAction(options) {
   if (apiAction.body !== undefined) {
     apiAction.body = JSON.stringify(apiAction.body);
   }
+
+  if (apiAction.query !== null && typeof apiAction.query === 'object') {
+    apiAction.endpoint = [
+      apiAction.endpoint.replace(/\?*/, ''),
+      qs.stringify(apiAction.query),
+    ].join('?');
+  }
+  if (apiAction.query !== undefined) delete apiAction.query;
 
   return {
     [CALL_API]: apiAction

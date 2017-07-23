@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AppLayout from '../components/AppLayout';
+import AppLayout from '../common/components/AppLayout';
 import { Divider, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
