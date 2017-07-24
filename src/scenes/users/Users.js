@@ -30,7 +30,7 @@ class Users extends React.Component {
 
           <Table.Body>
             {users.data ? users.data.map(({ username, nim, role, status }) => (
-              <Table.Row>
+              <Table.Row key={username}>
                 <Table.Cell>{username}</Table.Cell>
                 <Table.Cell>{nim}</Table.Cell>
                 <Table.Cell></Table.Cell>
@@ -45,7 +45,7 @@ class Users extends React.Component {
           </Table.Body>
         </Table>
 
-        <PageMenu floated='right' size='mini' storeKey='users' onChange={fetchUsersDispatcher} />
+        <PageMenu floated='right' size='mini' storeKey='users' onPageChange={fetchUsersDispatcher} />
 
       </AppLayout>
     );
@@ -59,10 +59,13 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  const { dispatch } = dispatchProps;
   return {
-    fetchUsersDispatcher: () => dispatch(fetchUsers(ownProps.users))
-  };
+    ...stateProps,
+    ...ownProps,
+    fetchUsersDispatcher: (pageInfo) => dispatch(fetchUsers(pageInfo))
+  }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
+export default connect(mapStateToProps, null, mergeProps)(Users);

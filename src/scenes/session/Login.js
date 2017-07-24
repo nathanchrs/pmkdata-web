@@ -68,15 +68,15 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     submitDispatcher: async (values) => {
-      let action = await dispatch(login(values));
-      if (action.error) {
-        if (action.payload) {
-          if (action.payload.status === 422) {
+      let response = await dispatch(login(values));
+      if (response.error) {
+        if (response.payload) {
+          if (response.payload.status === 422) {
             throw new SubmissionError({ _error: 'Username atau password kosong atau tidak valid.' });
           }
 
-          if (action.payload.status === 401) {
-            if (action.payload.response && action.payload.response.message === 'Account inactive.') {
+          if (response.payload.status === 401) {
+            if (response.payload.response && response.payload.response.message === 'Account inactive.') {
               throw new SubmissionError({ _error: 'Akun ini belum divalidasi oleh admin, coba beberapa saat lagi.' });
             }
             throw new SubmissionError({ _error: 'Username atau password salah.' });

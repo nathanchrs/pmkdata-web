@@ -1,7 +1,6 @@
 
 export const SET_PAGE = 'SET_PAGE';
 export const SET_PER_PAGE = 'SET_PER_PAGE';
-export const SET_LAST_PAGE = 'SET_LAST_PAGE';
 
 export function setPage(storeKey, page) {
   return {
@@ -17,9 +16,9 @@ export function setPerPage(storeKey, perPage) {
   };
 }
 
-export function setLastPage(storeKey, lastPage) {
+export function createPaginatedApiResponse(type, storeKey = '') {
   return {
-    type: SET_PER_PAGE,
-    payload: { storeKey, lastPage }
+    type,
+    meta: { pagination: { storeKey }}
   };
 }
