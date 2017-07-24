@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
 import { fetchUsers } from '../../services/users/actions';
-import { Divider, Header, Icon, Menu, Table } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Dimmer, Header, Icon, Loader, Message, Table } from 'semantic-ui-react';
 
 class Users extends React.Component {
   componentDidMount() {
@@ -15,9 +14,11 @@ class Users extends React.Component {
     const { users, isSupervisor, fetchUsersDispatcher } = this.props;
     return (
       <AppLayout section='users'>
+        <Dimmer inverted active={users.isFetching}><Loader size='big' /></Dimmer>
+
         <Header>Akses</Header>
 
-        <Table compact>
+        <Table compact attached={users.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Username</Table.HeaderCell>
@@ -45,6 +46,12 @@ class Users extends React.Component {
           </Table.Body>
         </Table>
 
+        {users.error &&
+          <Message error attached='bottom'>
+            <Icon name='warning sign'/> Data tidak dapat dimuat. Coba beberapa saat lagi.
+          </Message>
+        }
+
         <PageMenu floated='right' size='mini' storeKey='users' onPageChange={fetchUsersDispatcher} />
 
       </AppLayout>
@@ -59,13 +66,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
+const mapDispatchToProps = dispatch => {
   return {
-    ...stateProps,
-    ...ownProps,
     fetchUsersDispatcher: (pageInfo) => dispatch(fetchUsers(pageInfo))
-  }
+  };
 };
 
-export default connect(mapStateToProps, null, mergeProps)(Users);
+export default connect(mapStateToProps, mapDispatchToProps)(Users);
