@@ -48,7 +48,7 @@ class Users extends React.Component {
 
         {users.error &&
           <Message error attached='bottom'>
-            <Icon name='warning sign'/> Data tidak dapat dimuat. Coba beberapa saat lagi.
+            <Icon name='warning sign'/> {users.error}
           </Message>
         }
 
