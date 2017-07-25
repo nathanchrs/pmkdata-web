@@ -1,4 +1,5 @@
 import { createApiAction } from '../api';
+import { RESET_REDUX_STATE } from '../reducer';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -26,18 +27,20 @@ export function login(body) {
 }
 
 export function logout() {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     if (!getState().session.user) {
       return Promise.resolve();
     }
-    return dispatch(createApiAction({
+    let response = await dispatch(createApiAction({
       endpoint: '/api/session',
       method: 'DELETE',
       types: [LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE]
     }));
+    dispatch(clearSession());
+    return response;
   };
 }
 
 export function clearSession() {
-  return { type: CLEAR_SESSION };
+  return { type: RESET_REDUX_STATE };
 }
