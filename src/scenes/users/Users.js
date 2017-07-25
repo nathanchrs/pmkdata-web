@@ -30,8 +30,6 @@ class Users extends React.Component {
     const { users, isSupervisor, fetchUsersDispatcher } = this.props;
     return (
       <AppLayout section='users'>
-        <Dimmer inverted active={users.isFetching}><Loader size='big' /></Dimmer>
-
         <Header>Akun</Header>
 
         <Table compact selectable attached={users.error ? 'top' : null}>
@@ -70,6 +68,7 @@ class Users extends React.Component {
 
         <PageMenu floated='right' size='mini' storeKey='users' onPageChange={fetchUsersDispatcher} />
 
+        <Dimmer inverted active={users.isFetching}><Loader size='big' /></Dimmer>
         <EditUser open={this.state.editing} readOnlyValues={this.state.editingUser || {}} onClose={this.handleEditDone} />
 
       </AppLayout>

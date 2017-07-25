@@ -73,13 +73,12 @@ PageMenu.defaultProps = {
   storeKey: '',
   onPageChange: () => {},
   showPerPageMenu: true,
-  defaultPerPage: 25
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
     page: get(state, ownProps.storeKey + '.page', 1),
-    perPage: get(state, ownProps.storeKey + '.perPage', ownProps.defaultPerPage),
+    perPage: get(state, ownProps.storeKey + '.perPage'),
     search: get(state, ownProps.storeKey + '.search'),
     sort: get(state, ownProps.storeKey + '.sort'),
     filters: get(state, ownProps.storeKey + '.filters'),
