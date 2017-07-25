@@ -7,7 +7,7 @@ export const EDIT_USER_FORM = 'editUser';
 
 class EditUser extends React.Component {
   render() {
-    const { open, onClose, readOnlyValues } = this.props;
+    const { open, onClose, readOnlyValues, pristine, submitting } = this.props;
     return (
       <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='mini'>
         <Modal.Header>Edit Akun - {readOnlyValues.username}</Modal.Header>
@@ -22,7 +22,9 @@ class EditUser extends React.Component {
         </Modal.Content>
         <Modal.Actions>
           <Button onClick={onClose}>Batal</Button>
-          <Button primary>Simpan <Icon name='right chevron' /></Button>
+          <Button primary disabled={pristine || submitting} loading={submitting}>
+            Simpan <Icon name='right chevron' />
+          </Button>
         </Modal.Actions>
       </Modal>
     );

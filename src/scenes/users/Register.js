@@ -10,7 +10,7 @@ import { register } from '../../services/users/actions';
 
 class Register extends React.Component {
   render() {
-    const { handleSubmit, submitDispatcher, error, submitting, isAuthenticated, history } = this.props;
+    const { handleSubmit, submitDispatcher, error, pristine, submitting, isAuthenticated, history } = this.props;
 
     const { from: redirectLocation } = history.location.state || { from: { pathname: '/' } };
     if (isAuthenticated) {
@@ -32,7 +32,7 @@ class Register extends React.Component {
             <Button.Group fluid>
               <Button as={Link} to='/login' content='Login' />
               <Button as='button' type='submit' primary content='Daftar'
-                      loading={submitting} disabled={submitting} />
+                      loading={submitting} disabled={pristine || submitting} />
             </Button.Group>
           </Form>
         </Segment>
