@@ -32,7 +32,7 @@ class AppLayout extends React.Component {
                 <Icon name='users' />Anggota
               </Menu.Item>
               <Menu.Item active={section === 'users'} name='users' link as={Link} to='/users'>
-                <Icon name='address book outline' />Akses
+                <Icon name='address book outline' />Akun
               </Menu.Item>
             </div>
           )}

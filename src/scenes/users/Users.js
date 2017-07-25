@@ -4,11 +4,27 @@ import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
 import { fetchUsers } from '../../services/users/actions';
 import { Dimmer, Header, Icon, Loader, Message, Table } from 'semantic-ui-react';
+import EditUser, { EDIT_USER_FORM } from './EditUser'
+import { initialize } from 'redux-form';
 
 class Users extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { editing: false, editingUser: null };
+  }
+
   componentDidMount() {
     this.props.fetchUsersDispatcher(this.props.users);
   }
+
+  handleEditStart = (event, { username, nim, role, status }) => {
+    this.props.initEditUserFormDispatcher({ nim, role, status });
+    this.setState({ editing: true, editingUser: { username, nim, role, status } });
+  };
+
+  handleEditDone = () => {
+    this.setState({ editing: false, editingUser: null });
+  };
 
   render() {
     const { users, isSupervisor, fetchUsersDispatcher } = this.props;
@@ -16,27 +32,27 @@ class Users extends React.Component {
       <AppLayout section='users'>
         <Dimmer inverted active={users.isFetching}><Loader size='big' /></Dimmer>
 
-        <Header>Akses</Header>
+        <Header>Akun</Header>
 
-        <Table compact attached={users.error ? 'top' : null}>
+        <Table compact selectable attached={users.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Username</Table.HeaderCell>
               <Table.HeaderCell>NIM</Table.HeaderCell>
               <Table.HeaderCell>Nama</Table.HeaderCell>
-              <Table.HeaderCell>Akses</Table.HeaderCell>
+              <Table.HeaderCell>Jenis akun</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
-            {users.data ? users.data.map(({ username, nim, role, status }) => (
-              <Table.Row key={username}>
-                <Table.Cell>{username}</Table.Cell>
-                <Table.Cell>{nim}</Table.Cell>
+            {users.data ? users.data.map((user) => (
+              <Table.Row key={user.username} onClick={(e) => this.handleEditStart(e, user)}>
+                <Table.Cell>{user.username}</Table.Cell>
+                <Table.Cell>{user.nim}</Table.Cell>
                 <Table.Cell></Table.Cell>
-                <Table.Cell>{role}</Table.Cell>
-                <Table.Cell>{status}</Table.Cell>
+                <Table.Cell>{user.role}</Table.Cell>
+                <Table.Cell>{user.status}</Table.Cell>
               </Table.Row>
             )) :
               <Table.Row>
@@ -54,6 +70,8 @@ class Users extends React.Component {
 
         <PageMenu floated='right' size='mini' storeKey='users' onPageChange={fetchUsersDispatcher} />
 
+        <EditUser open={this.state.editing} readOnlyValues={this.state.editingUser || {}} onClose={this.handleEditDone} />
+
       </AppLayout>
     );
   }
@@ -68,7 +86,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchUsersDispatcher: (pageInfo) => dispatch(fetchUsers(pageInfo))
+    fetchUsersDispatcher: (pageInfo) => dispatch(fetchUsers(pageInfo)),
+    initEditUserFormDispatcher: initialValues => dispatch(initialize(EDIT_USER_FORM, initialValues))
   };
 };
 
