@@ -9,6 +9,10 @@ export const FETCH_USERS_REQUEST = 'FETCH_USERS_REQUEST';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
 export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE';
 
+export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
+export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+export const UPDATE_USER_FAILURE = 'UPDATE_USER_FAILURE';
+
 export function register(body) {
   return (dispatch, getState) => {
     if (getState().session.user) {
@@ -33,3 +37,11 @@ export function fetchUsers({ page, perPage, search, sort, filters } = {}) {
   });
 }
 
+export function updateUser(username, body) {
+  return createApiAction({
+    endpoint: '/api/users/' + username,
+    method: 'PATCH',
+    body,
+    types: [UPDATE_USER_REQUEST, { type: UPDATE_USER_SUCCESS, meta: { updateKey: username, updateBody: body } }, UPDATE_USER_FAILURE]
+  });
+}

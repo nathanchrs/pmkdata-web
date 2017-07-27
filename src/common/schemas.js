@@ -2,7 +2,7 @@
 const schemas = {
 
   nim: {
-    'type': 'integer',
+    'type': ['integer', 'null'],
     'minimum': 10000000,
     'maximum': 20000000,
     'errorMessage': 'NIM tidak valid'
@@ -36,7 +36,7 @@ const schemas = {
 
   userStatus: {
     'type': 'string',
-    'enum': ['active', 'awaiting-validation', 'disabled']
+    'enum': ['active', 'awaiting_validation', 'disabled']
   },
 
   pagingAndSortingProperties: {

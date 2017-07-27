@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
-import { FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE } from './actions';
+import { FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE, UPDATE_USER_SUCCESS } from './actions';
 import addPagination from '../../common/components/Pagination/reducer';
 
 const defaultState = { data: [], isFetching: false, error: false };
@@ -22,6 +22,14 @@ function usersReducer(state = defaultState, action) {
       newState = cloneDeep(state);
       return Object.assign(newState, { data: [], isFetching: false,
         error: 'Terjadi kesalahan pada server. Coba beberapa saat lagi.' });
+
+    case UPDATE_USER_SUCCESS:
+      newState = cloneDeep(state);
+      newState.data = newState.data.map(
+        item => item.username === action.meta.updateKey ? Object.assign(item, action.meta.updateBody) : item
+      );
+      console.log(newState); // DEBUG
+      return newState;
 
     default:
       return state;

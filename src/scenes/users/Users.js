@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
 import { fetchUsers } from '../../services/users/actions';
-import { Dimmer, Header, Icon, Loader, Message, Table } from 'semantic-ui-react';
+import { Button, Dimmer, Header, Icon, Loader, Message, Table } from 'semantic-ui-react';
 import EditUser, { EDIT_USER_FORM } from './EditUser'
 import { initialize } from 'redux-form';
+import { enumText, userStatuses, userRoles } from '../../common/enums';
 
 class Users extends React.Component {
   constructor(props) {
@@ -17,9 +18,9 @@ class Users extends React.Component {
     this.props.fetchUsersDispatcher(this.props.users);
   }
 
-  handleEditStart = (event, { username, nim, role, status }) => {
-    this.props.initEditUserFormDispatcher({ nim, role, status });
-    this.setState({ editing: true, editingUser: { username, nim, role, status } });
+  handleEditStart = (event, { username, nim, email, role, status }) => {
+    this.props.initEditUserFormDispatcher({ nim, email, role, status });
+    this.setState({ editing: true, editingUser: { username, nim, email, role, status } });
   };
 
   handleEditDone = () => {
@@ -37,7 +38,7 @@ class Users extends React.Component {
             <Table.Row>
               <Table.HeaderCell>Username</Table.HeaderCell>
               <Table.HeaderCell>NIM</Table.HeaderCell>
-              <Table.HeaderCell>Nama</Table.HeaderCell>
+              <Table.HeaderCell>Email</Table.HeaderCell>
               <Table.HeaderCell>Jenis akun</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
             </Table.Row>
@@ -48,9 +49,13 @@ class Users extends React.Component {
               <Table.Row key={user.username} onClick={(e) => this.handleEditStart(e, user)}>
                 <Table.Cell>{user.username}</Table.Cell>
                 <Table.Cell>{user.nim}</Table.Cell>
-                <Table.Cell></Table.Cell>
-                <Table.Cell>{user.role}</Table.Cell>
-                <Table.Cell>{user.status}</Table.Cell>
+                <Table.Cell>{user.email}</Table.Cell>
+                <Table.Cell>{enumText(userRoles, user.role)}</Table.Cell>
+                <Table.Cell
+                  negative={user.status === 'disabled'}
+                  warning={user.status === 'awaiting_validation'}>
+                  {enumText(userStatuses, user.status)}
+                </Table.Cell>
               </Table.Row>
             )) :
               <Table.Row>
