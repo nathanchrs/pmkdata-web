@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { Container, Divider, Icon, Menu, Sidebar } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { logout } from '../../services/session/actions';
-import pmkLogo from'../resources/pmklogo.png';
+import pmkLogo from '../resources/pmklogo.png';
 
 class AppLayout extends React.Component {
-  render() {
+  render () {
     const { isSupervisor, section } = this.props;
     return (
       <Sidebar.Pushable>
-        <Sidebar as={Menu}  borderless animation='overlay' width='very thin' visible vertical inverted icon='labeled' size='tiny'>
+        <Sidebar as={Menu} borderless animation='overlay' width='very thin' visible vertical inverted icon='labeled' size='tiny'>
           <br />
           <Menu.Item header><img src={pmkLogo} alt='PMK ITB logo' /><br /><br />PMK ITB</Menu.Item>
 

@@ -11,7 +11,7 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
 export const CLEAR_SESSION = 'CLEAR_SESSION';
 
-export function login(body) {
+export function login (body) {
   return (dispatch, getState) => {
     if (getState().session.user) {
       return Promise.resolve();
@@ -26,7 +26,7 @@ export function login(body) {
   };
 }
 
-export function logout() {
+export function logout () {
   return async (dispatch, getState) => {
     if (!getState().session.user) {
       return Promise.resolve();
@@ -41,6 +41,6 @@ export function logout() {
   };
 }
 
-export function clearSession() {
+export function clearSession () {
   return { type: RESET_REDUX_STATE };
 }

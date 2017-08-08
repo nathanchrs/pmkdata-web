@@ -9,7 +9,7 @@ const ajv = new Ajv({
 });
 ajvErrors(ajv);
 
-function createValidator(schema) {
+function createValidator (schema) {
   const validate = ajv.compile(schema);
   return (values) => {
     let isValid = validate(values);
@@ -20,11 +20,11 @@ function createValidator(schema) {
       validate.errors.forEach((error) => {
         let property = error.dataPath.split('/').filter(str => str)[0];
         if (!property) property = '_error';
-        errors[property] = error.message
+        errors[property] = error.message;
       });
       return errors;
     }
-  }
+  };
 }
 
 export { createValidator };

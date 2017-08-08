@@ -1,7 +1,7 @@
 import { SET_PAGE, SET_PER_PAGE } from './actions';
 import cloneDeep from 'lodash.clonedeep';
 
-export default function addPagination(reducer, storeKey = '') {
+export default function addPagination (reducer, storeKey = '') {
   return (state = {}, action) => {
     let newState;
     if (action.payload && storeKey === action.payload.storeKey) {

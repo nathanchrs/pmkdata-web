@@ -1,13 +1,13 @@
 import cloneDeep from 'lodash.clonedeep';
-import { FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_FAILURE, UPDATE_USER_SUCCESS, DELETE_USER_SUCCESS } from './actions';
+import { FETCH_MENTORS_REQUEST, FETCH_MENTORS_SUCCESS, FETCH_MENTORS_FAILURE, UPDATE_MENTOR_SUCCESS, CREATE_MENTOR_SUCCESS, DELETE_MENTOR_SUCCESS } from './actions';
 import addPagination from '../../common/components/Pagination/reducer';
 
 const defaultState = { data: [], isFetching: false, error: false };
 
-function usersReducer (state = defaultState, action) {
+function mentorReducer (state = defaultState, action) {
   let newState;
   switch (action.type) {
-    case FETCH_USERS_REQUEST:
+    case FETCH_MENTORS_REQUEST:
       newState = cloneDeep(state);
       if (action.error) {
         return Object.assign(newState, { data: [],
@@ -16,27 +16,33 @@ function usersReducer (state = defaultState, action) {
       } else {
         return Object.assign(newState, {isFetching: true, error: false});
       }
-    case FETCH_USERS_SUCCESS:
+    case FETCH_MENTORS_SUCCESS:
       newState = cloneDeep(state);
       return Object.assign(newState, { data: action.payload.data, isFetching: false, error: false });
-    case FETCH_USERS_FAILURE:
+    case FETCH_MENTORS_FAILURE:
       newState = cloneDeep(state);
       return Object.assign(newState, { data: [],
         isFetching: false,
         error: 'Terjadi kesalahan pada server. Coba beberapa saat lagi.' });
 
-    case UPDATE_USER_SUCCESS:
+    case UPDATE_MENTOR_SUCCESS:
       newState = cloneDeep(state);
       newState.data = newState.data.map(
-        item => item.username === action.meta.updateKey ? Object.assign(item, action.meta.updateBody) : item
+        item => item.id === action.meta.updateKey ? Object.assign(item, action.meta.updateBody) : item
       );
       console.log(newState); // DEBUG
       return newState;
 
-    case DELETE_USER_SUCCESS:
+    case CREATE_MENTOR_SUCCESS:
+      newState = cloneDeep(state);
+      newState.data.push(action.payload);
+      console.log(newState); // DEBUG
+      return newState;
+
+    case DELETE_MENTOR_SUCCESS:
       newState = cloneDeep(state);
       newState.data = newState.data.filter(
-        item => item.username !== action.meta.deleteKey
+        item => item.id !== action.meta.deleteKey
       );
       console.log(newState); // DEBUG
       return newState;
@@ -46,4 +52,4 @@ function usersReducer (state = defaultState, action) {
   }
 }
 
-export default addPagination(usersReducer, 'users');
+export default addPagination(mentorReducer, 'mentors');

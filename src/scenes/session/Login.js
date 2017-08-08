@@ -6,9 +6,10 @@ import { createValidator } from '../../common/validation';
 import { Button, Container, Divider, Form, Header, Message, Segment } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
 import { login } from '../../services/session/actions';
+import commonSchemas from '../../common/schemas';
 
 class Login extends React.Component {
-  render() {
+  render () {
     const { handleSubmit, submitDispatcher, error, pristine, submitting, isAuthenticated, history } = this.props;
 
     const { from: redirectLocation } = history.location.state || { from: { pathname: '/' } };
@@ -34,7 +35,7 @@ class Login extends React.Component {
             <Button.Group fluid>
               <Button as={Link} to='/register' content='Daftar' />
               <Button as='button' type='submit' primary content='Login'
-                      loading={submitting} disabled={pristine || submitting} />
+                loading={submitting} disabled={pristine || submitting} />
             </Button.Group>
           </Form>
         </Segment>
@@ -46,8 +47,8 @@ class Login extends React.Component {
 const schema = {
   'type': 'object',
   'properties': {
-    'username': { type: 'string' },
-    'password': { type: 'string' }
+    'username': commonSchemas.username,
+    'password': commonSchemas.password
   },
   'required': ['username', 'password'],
   'errorMessage': {
@@ -89,5 +90,5 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-Login = reduxForm({ form: 'login', validate: createValidator(schema) })(Login);
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+const reduxFormLogin = reduxForm({ form: 'login', validate: createValidator(schema) })(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFormLogin);

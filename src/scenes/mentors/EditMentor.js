@@ -1,27 +1,27 @@
 import React from 'react';
-import { Button, Select, Icon, Modal, Form, Message } from 'semantic-ui-react';
+import { Button, Icon, Modal, Form, Message, Select } from 'semantic-ui-react';
 import ControlledField from '../../common/components/ControlledField';
 import { reduxForm, SubmissionError } from 'redux-form';
-import { userRoles, userStatuses } from '../../common/enums';
+import { userStatuses } from '../../common/enums';
 import commonSchemas from '../../common/schemas';
 import { createValidator } from '../../common/validation';
-import { updateUser } from '../../services/users/actions';
+import { updateMentor } from '../../services/mentors/actions';
 
-export const EDIT_USER_FORM = 'editUser';
+export const EDIT_MENTOR_FORM = 'editMentor';
 
-class EditUser extends React.Component {
+class EditMentor extends React.Component {
   render () {
     const { open, onClose, readOnlyValues, pristine, submitting, error, handleSubmit } = this.props;
+
     return (
       <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='mini'>
-        <Modal.Header>Edit Akun - {readOnlyValues.username}</Modal.Header>
+        <Modal.Header>Edit Mentor - {readOnlyValues.id}</Modal.Header>
         <Modal.Content>
           <Modal.Description>
             <Form onSubmit={handleSubmit(submit)} error={!!error}>
-              <ControlledField name='nim' label='NIM' />
-              <ControlledField name='email' label='Email' />
-              <ControlledField name='role' label='Jenis akun' fluid component={Select} options={userRoles} />
-              <ControlledField name='status' label='Status akun' fluid component={Select} options={userStatuses} />
+              <ControlledField name='mentor_username' label='Username' />
+              <ControlledField name='event_id' label='No event' />
+              <ControlledField name='status' label='Status mentor' fluid component={Select} options={userStatuses} />
               <Message error>{error}</Message>
             </Form>
           </Modal.Description>
@@ -42,8 +42,7 @@ this.defaultProps = {
 };
 
 async function submit (values, dispatch, ownProps) {
-  if (values.nim === '') values.nim = undefined;
-  let response = await dispatch(updateUser(ownProps.readOnlyValues.username, values));
+  let response = await dispatch(updateMentor(ownProps.readOnlyValues.id, values));
   if (response.error) {
     if (response.payload && response.payload.status === 422) {
       throw new SubmissionError({ _error: 'Terdapat input yang tidak valid' });
@@ -56,20 +55,19 @@ async function submit (values, dispatch, ownProps) {
 const schema = {
   'type': 'object',
   'properties': {
-    'nim': commonSchemas.nim,
-    'email': commonSchemas.email,
-    'role': commonSchemas.role,
+    'mentor_username': commonSchemas.username,
+    'event_id': commonSchemas.number(),
     'status': commonSchemas.userStatus
   },
-  'required': ['email', 'role', 'status'],
+  'required': ['mentor_username', 'event_id', 'status'],
   'errorMessage': {
     'properties': {
-      'email': 'Email harus diisi',
-      'role': 'Jenis akun harus diisi',
-      'status': 'Status akun harus diisi'
+      'mentor_username': 'Username harus diisi',
+      'event_id': 'No event harus diisi',
+      'status': 'Status harus diisi'
     },
     '_': 'Terdapat input yang tidak valid.'
   }
 };
 
-export default reduxForm({ form: EDIT_USER_FORM, validate: createValidator(schema) })(EditUser);
+export default reduxForm({ form: EDIT_MENTOR_FORM, validate: createValidator(schema) })(EditMentor);
