@@ -6,7 +6,6 @@ import { fetchStudents, deleteStudent } from '../../services/students/actions';
 import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
 import EditStudent, { EDIT_STUDENT_FORM } from './EditStudent';
 import { initialize } from 'redux-form';
-import { enumText, userStatuses, userRoles } from '../../common/enums';
 import moment from 'moment';
 
 class Students extends React.Component {
@@ -27,9 +26,9 @@ class Students extends React.Component {
     this.props.fetchStudentsDispatcher(this.props.students);
   }
 
-  handleEditStart = (event, { id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church }) => {
-    this.props.initEditStudentFormDispatcher({ id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church });
-    this.setState({ editing: true, editingStudent: { id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church } });
+  handleEditStart = (event, { id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church, parent_phone, bandung_address, hometown_address }) => {
+    this.props.initEditStudentFormDispatcher({ id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church, parent_phone, bandung_address, hometown_address });
+    this.setState({ editing: true, editingStudent: { id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church, parent_phone, bandung_address, hometown_address } });
   };
 
   handleEditDone = () => {

@@ -9,6 +9,7 @@ import Users from './scenes/users/Users';
 import Students from './scenes/students/Students';
 import Interactions from './scenes/interactions/Interactions';
 import Mentors from './scenes/mentors/Mentors';
+import Events from './scenes/events/Events';
 import './App.css';
 import 'moment/locale/id';
 
@@ -24,6 +25,7 @@ class App extends React.Component {
           <ProtectedRoute path='/students' component={Students} />
           <ProtectedRoute path='/interactions' component={Interactions} />
           <ProtectedRoute path='/mentors' component={Mentors} />
+          <ProtectedRoute path='/events' component={Events} />
 
           <Route path='/login' component={Login} />
           <Route path='/register' component={Register} />

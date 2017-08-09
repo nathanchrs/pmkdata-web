@@ -4,22 +4,22 @@ import ControlledField from '../../common/components/ControlledField';
 import { reduxForm, SubmissionError } from 'redux-form';
 import commonSchemas from '../../common/schemas';
 import { createValidator } from '../../common/validation';
-import { createMentor } from '../../services/mentors/actions';
+import { updateEvent } from '../../services/events/actions';
 
-export const CREATE_MENTOR_FORM = 'createMentor';
+export const EDIT_EVENT_FORM = 'editEvent';
 
-class CreateMentor extends React.Component {
+class EditEvent extends React.Component {
   render () {
-    const { open, onClose, pristine, submitting, error, handleSubmit } = this.props;
+    const { open, onClose, readOnlyValues, pristine, submitting, error, handleSubmit } = this.props;
 
     return (
       <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='mini'>
-        <Modal.Header>Tambah Mentor</Modal.Header>
+        <Modal.Header>Edit Event - {readOnlyValues.id}</Modal.Header>
         <Modal.Content>
           <Modal.Description>
             <Form onSubmit={handleSubmit(submit)} error={!!error}>
-              <ControlledField name='mentor_username' label='Username' />
-              <ControlledField name='event_id' label='No event' />
+              <ControlledField name='name' label='Nama Kegiatan' />
+              <ControlledField name='description' label='Deskripsi kegiatan' />
               <Message error>{error}</Message>
             </Form>
           </Modal.Description>
@@ -40,12 +40,12 @@ this.defaultProps = {
 };
 
 async function submit (values, dispatch, ownProps) {
-  let response = await dispatch(createMentor(values));
+  let response = await dispatch(updateEvent(ownProps.readOnlyValues.id, values));
   if (response.error) {
     if (response.payload && response.payload.status === 422) {
       throw new SubmissionError({ _error: 'Terdapat input yang tidak valid' });
     }
-    throw new SubmissionError({ _error: 'Create data gagal, coba beberapa saat lagi.' });
+    throw new SubmissionError({ _error: 'Update data gagal, coba beberapa saat lagi.' });
   }
   ownProps.onClose();
 }
@@ -53,17 +53,17 @@ async function submit (values, dispatch, ownProps) {
 const schema = {
   'type': 'object',
   'properties': {
-    'mentor_username': commonSchemas.username,
-    'event_id': commonSchemas.number()
+    'name': commonSchemas.varchar(255),
+    'description': commonSchemas.varchar()
   },
-  'required': ['mentor_username', 'event_id'],
+  'required': ['name', 'description'],
   'errorMessage': {
     'properties': {
-      'mentor_username': 'Username harus diisi',
-      'event_id': 'No event harus diisi'
+      'name': 'Nama kegiatan harus diisi',
+      'description': 'Deskripsi harus diisi'
     },
     '_': 'Terdapat input yang tidak valid.'
   }
 };
 
-export default reduxForm({ form: CREATE_MENTOR_FORM, validate: createValidator(schema) })(CreateMentor);
+export default reduxForm({ form: EDIT_EVENT_FORM, validate: createValidator(schema) })(EditEvent);

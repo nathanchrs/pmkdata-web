@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Select, Icon, Modal, Form, Message, Confirm } from 'semantic-ui-react';
+import { Button, Select, Icon, Modal, Form, Message } from 'semantic-ui-react';
 import ControlledField from '../../common/components/ControlledField';
 import { reduxForm, SubmissionError } from 'redux-form';
 import DatePicker from '../../common/components/DatePicker';
