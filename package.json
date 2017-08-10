@@ -16,7 +16,7 @@
     "react-addons-css-transition-group": "^15.6.0",
     "react-datetime": "^2.9.0",
     "react-dom": "^15.6.1",
-    "react-redux": "^5.0.5",
+    "react-redux": "^5.0.6",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^4.0.8",
@@ -26,7 +26,7 @@
     "redux-persist": "^4.8.3",
     "redux-persist-transform-filter": "0.0.14",
     "redux-thunk": "^2.2.0",
-    "semantic-ui-css": "^2.2.11",
+    "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.71.3"
   },
   "scripts": {

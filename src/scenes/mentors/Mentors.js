@@ -16,7 +16,7 @@ class Mentors extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchMentorsDispatcher(this.props.mentors);
+    this.props.isSupervisor ? this.props.fetchMentorsDispatcher(this.props.mentors) : this.props.fetchMentorsDispatcher({filters: {filter: "{\"username\":\"" + this.props.username + "\"}"}});
   }
 
   handleEditStart = (event, { id, mentor_username, event_id, status }) => {
@@ -55,9 +55,12 @@ class Mentors extends React.Component {
     return (
       <AppLayout section='mentors'>
         <Header floated='left'>Mentor</Header>
-        <Header floated='right'>
-          <Button icon='plus' onClick={() => this.handleCreateStart()} />
-        </Header>
+        {
+          isSupervisor &&
+          <Header floated='right'>
+            <Button icon='plus' onClick={() => this.handleCreateStart()} />
+          </Header>
+        }
         <Table compact selectable attached={mentors.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
@@ -65,8 +68,14 @@ class Mentors extends React.Component {
               <Table.HeaderCell>Username</Table.HeaderCell>
               <Table.HeaderCell>Event Id</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Edit</Table.HeaderCell>
-              <Table.HeaderCell>Delete</Table.HeaderCell>
+              {
+                isSupervisor &&
+                <Table.HeaderCell>Edit</Table.HeaderCell>
+              }
+              {
+                isSupervisor &&
+                <Table.HeaderCell>Delete</Table.HeaderCell>   
+              }    
             </Table.Row>
           </Table.Header>
 
@@ -77,18 +86,28 @@ class Mentors extends React.Component {
                 <Table.Cell>{mentor.mentor_username}</Table.Cell>
                 <Table.Cell>{mentor.event_id}</Table.Cell>
                 <Table.Cell
-                  negative={mentor.status === 'disabled'}
-                  warning={mentor.status === 'awaiting_validation'}>
-                  {enumText(userStatuses, mentor.status)}
+                    negative={mentor.status === 'disabled'}
+                    warning={mentor.status === 'awaiting_validation'}
+                >
+                {enumText(userStatuses, mentor.status)}
                 </Table.Cell>
-                <Table.Cell><Button icon="edit" onClick={(e) => this.handleEditStart(e, mentor)} /></Table.Cell>
-                <Table.Cell><Button icon="delete" negative onClick={this.handleWarningOpen} /></Table.Cell>
-                <Confirm
-                  open={this.state.warningOpen}
-                  content='This action cannot be undone!'
-                  onCancel={this.handleWarningClose}
-                  onConfirm={(e) => this.handleDelete(e, mentor.id)}
-                />
+                {
+                  isSupervisor &&
+                  <Table.Cell><Button icon="edit" onClick={(e) => this.handleEditStart(e, mentor)} /></Table.Cell>
+                }
+                {
+                  isSupervisor &&
+                  <Table.Cell><Button icon="delete" negative onClick={this.handleWarningOpen} /></Table.Cell>
+                }
+                {
+                  isSupervisor &&
+                  <Confirm
+                    open={this.state.warningOpen}
+                    content='This action cannot be undone!'
+                    onCancel={this.handleWarningClose}
+                    onConfirm={(e) => this.handleDelete(e, mentor.id)}
+                  />
+                }
               </Table.Row>
             )) :
               <Table.Row>
@@ -97,8 +116,9 @@ class Mentors extends React.Component {
             }
           </Table.Body>
         </Table>
-
-        {mentors.error &&
+        
+        {
+          mentors.error &&
           <Message error attached='bottom'>
             <Icon name='warning sign'/> {mentors.error}
           </Message>
@@ -117,6 +137,7 @@ class Mentors extends React.Component {
 const mapStateToProps = state => {
   return {
     mentors: state.mentors,
+    username: state.session.user.username,
     isSupervisor: state.session.user && (state.session.user.role === 'supervisor' || state.session.user.role === 'admin')
   };
 };
