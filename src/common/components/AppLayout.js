@@ -7,7 +7,7 @@ import pmkLogo from'../resources/pmklogo.png';
 
 class AppLayout extends React.Component {
   render() {
-    const { isSupervisor, section } = this.props;
+    const { isSupervisor, section, username } = this.props;
     return (
       <Sidebar.Pushable>
         <Sidebar as={Menu}  borderless animation='overlay' width='very thin' visible vertical inverted icon='labeled' size='tiny'>
@@ -39,7 +39,7 @@ class AppLayout extends React.Component {
 
           <Divider />
           <Menu.Item name='logout' link onClick={this.props.onLogout}>
-            <Icon name='log out' />Logout
+            <Icon name='log out' />Logout ({username})
           </Menu.Item>
 
         </Sidebar>
@@ -55,6 +55,7 @@ class AppLayout extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    username: state.session.user && state.session.user.username,
     isSupervisor: state.session.user && (state.session.user.role === 'supervisor' || state.session.user.role === 'admin')
   };
 };
