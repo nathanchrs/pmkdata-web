@@ -11,10 +11,9 @@ import 'semantic-ui-css/semantic.min.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-
 const store = createStore(
   rootReducer, undefined, compose(
-    applyMiddleware(thunkMiddleware, apiMiddleware, apiErrorHandlerMiddleware,),
+    applyMiddleware(thunkMiddleware, apiMiddleware, apiErrorHandlerMiddleware),
     autoRehydrate()
   )
 );

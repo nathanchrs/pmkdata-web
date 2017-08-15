@@ -1,14 +1,16 @@
 import React from 'react';
 import { Field } from 'redux-form';
 import { Form, Input } from 'semantic-ui-react';
+import DatePicker from './DatePicker';
 
 class ControlledField extends React.Component {
   innerComponent = innerProps => {
     const { input, meta, ...innerPropsRest } = innerProps;
+    const onChange = this.props.component === DatePicker ? (data) => input.onChange(data) : (event, data) => input.onChange(data.value);
     const actualComponentProps = {
       ...innerPropsRest,
       ...input,
-      onChange: (event, data) => input.onChange(data.value),
+      onChange,
       error: meta.touched && meta.invalid,
       loading: meta.asyncValidating
     };

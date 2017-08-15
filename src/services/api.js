@@ -1,7 +1,7 @@
 import { CALL_API } from '@aftonbladet/redux-api-middleware';
 import qs from 'qs';
 
-export function createApiAction(options) {
+export function createApiAction (options) {
   const defaultOptions = {
     method: 'GET',
     headers: {
@@ -19,7 +19,7 @@ export function createApiAction(options) {
   if (apiAction.query !== null && typeof apiAction.query === 'object') {
     apiAction.endpoint = [
       apiAction.endpoint.replace(/\?*/, ''),
-      qs.stringify(apiAction.query),
+      qs.stringify(apiAction.query)
     ].join('?');
   }
   if (apiAction.query !== undefined) delete apiAction.query;
