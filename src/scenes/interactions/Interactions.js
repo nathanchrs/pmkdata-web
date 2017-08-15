@@ -1,22 +1,25 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
+import InteractionDetail from './InteractionDetail';
 import { fetchInteractions, deleteInteraction } from '../../services/interactions/actions';
 import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
 import EditInteraction, { EDIT_INTERACTION_FORM } from './EditInteraction';
 import CreateInteraction, { CREATE_INTERACTION_FORM } from './CreateInteraction';
 import { initialize } from 'redux-form';
 import moment from 'moment';
+import SearchBox from '../../common/components/SearchBox';
 
 class Interactions extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editing: false, editingInteraction: null, creating: false, warningOpen: false};
+    this.state = { editing: false, editingInteraction: null, creating: false, warningOpen: false, search: ''};
   }
 
   componentDidMount() {
-    this.props.fetchInteractionsDispatcher(this.props.interactions);
+    this.props.isSupervisor ? this.props.fetchInteractionsDispatcher(this.props.interactions) : this.props.fetchInteractionsDispatcher({filters: {filter: this.props.username }});
   }
 
   handleEditStart = (event, { id, time, notes, tags }) => {
@@ -50,8 +53,24 @@ class Interactions extends React.Component {
     this.handleWarningClose(event);
   }
 
+  // Search Box
+  resetSearch = () => {
+    this.setState({ search: ''});
+    this.props.fetchEventsDispatcher(Object.assign(this.props.events, {search: this.state.search}));
+  }
+  
+  handleSearch = (search) => {
+    this.setState({ search });
+    this.props.fetchEventsDispatcher(Object.assign(this.props.events, {search: this.state.search}));
+  }
+
   render() {
     const { interactions, isSupervisor, fetchInteractionsDispatcher } = this.props;
+    if(this.props.match.params.id) {
+      return (
+        <InteractionDetail id={this.props.match.params.id} />
+      );
+    }
     return (
       <AppLayout section='interactions'>
         <Header floated='left'>Interaksi</Header>
@@ -61,6 +80,16 @@ class Interactions extends React.Component {
         <Table compact selectable attached={interactions.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
+              <Table.HeaderCell colSpan={7}>
+                <
+                  SearchBox 
+                  dispatcher={this.props.fetchInteractionsDispatcher}
+                  storeKey='events' 
+                />
+              </Table.HeaderCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell />
               <Table.HeaderCell>id</Table.HeaderCell>
               <Table.HeaderCell>Waktu</Table.HeaderCell>
               <Table.HeaderCell>Catatan</Table.HeaderCell>
@@ -71,8 +100,11 @@ class Interactions extends React.Component {
           </Table.Header>
 
           <Table.Body>
-            {interactions.data ? interactions.data.map((interaction) => (
+            {interactions.data && interactions.data.length > 0 ? interactions.data.map((interaction) => (
               <Table.Row key={interaction.id}>
+                <Table.Cell collapsing>
+                  <Button content='Detail' positive as={Link} to={'/interactions/' + interaction.id} />
+                </Table.Cell>
                 <Table.Cell>{interaction.id}</Table.Cell>
                 <Table.Cell>{moment(interaction.time).format('LLLL')}</Table.Cell>
                 <Table.Cell>{interaction.notes}</Table.Cell>
@@ -113,6 +145,7 @@ class Interactions extends React.Component {
 const mapStateToProps = state => {
   return {
     interactions: state.interactions,
+    username: state.session.user.username,
     isSupervisor: state.session.user && (state.session.user.role === 'supervisor' || state.session.user.role === 'admin')
   };
 };

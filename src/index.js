@@ -10,6 +10,10 @@ import rootReducer from './services/reducer';
 import 'semantic-ui-css/semantic.min.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import 'babel-polyfill';
+import promise from 'es6-promise';
+
+promise.polyfill();
 
 const store = createStore(
   rootReducer, undefined, compose(

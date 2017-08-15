@@ -23,9 +23,9 @@ class App extends React.Component {
           <ProtectedRoute exact path='/' component={Dashboard} />
           <ProtectedRoute path='/users' component={Users} />
           <ProtectedRoute path='/students' component={Students} />
-          <ProtectedRoute path='/interactions' component={Interactions} />
+          <ProtectedRoute path='/interactions/:id?' component={Interactions} />
           <ProtectedRoute path='/mentors' component={Mentors} />
-          <ProtectedRoute path='/events' component={Events} />
+          <ProtectedRoute path='/events/:id?' component={Events} />
 
           <Route path='/login' component={Login} />
           <Route path='/register' component={Register} />

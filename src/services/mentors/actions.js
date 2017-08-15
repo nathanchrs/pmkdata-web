@@ -33,7 +33,7 @@ export function fetchMentors ({ page, perPage, search, sort, filters } = {}) {
     endpoint: '/api/mentors',
     method: 'GET',
     query: { page, perPage, search, sort, ...filters },
-    types: [FETCH_MENTORS_REQUEST, createPaginatedApiResponse(FETCH_MENTORS_SUCCESS, 'mentors'), FETCH_MENTORS_FAILURE]
+    types: [FETCH_MENTORS_REQUEST, createPaginatedApiResponse(FETCH_MENTORS_SUCCESS, 'mentors', { search, sort, filters }), FETCH_MENTORS_FAILURE]
   });
 }
 

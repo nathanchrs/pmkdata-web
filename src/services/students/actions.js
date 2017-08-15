@@ -18,7 +18,7 @@ export function fetchStudents ({ page, perPage, search, sort, filters } = {}) {
     endpoint: '/api/students',
     method: 'GET',
     query: { page, perPage, search, sort, ...filters },
-    types: [FETCH_STUDENTS_REQUEST, createPaginatedApiResponse(FETCH_STUDENTS_SUCCESS, 'students'), FETCH_STUDENTS_FAILURE]
+    types: [FETCH_STUDENTS_REQUEST, createPaginatedApiResponse(FETCH_STUDENTS_SUCCESS, 'students', { search, sort, filters }), FETCH_STUDENTS_FAILURE]
   });
 }
 

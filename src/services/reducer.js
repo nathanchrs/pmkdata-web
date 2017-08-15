@@ -6,6 +6,8 @@ import studentsReducer from './students/reducer';
 import interactionsReducer from './interactions/reducer';
 import mentorsReducer from './mentors/reducer';
 import eventsReducer from './events/reducer';
+import menteesReducer from './mentees/reducer';
+import interactionDetailReducer from './interaction_detail/reducer';
 
 export const RESET_REDUX_STATE = 'RESET_REDUX_STATE';
 
@@ -16,7 +18,9 @@ const appReducer = combineReducers({
   students: studentsReducer,
   interactions: interactionsReducer,
   mentors: mentorsReducer,
-  events: eventsReducer
+  events: eventsReducer,
+  interaction_detail: interactionDetailReducer,
+  mentees: menteesReducer
 });
 
 const rootReducer = (state, action) => {

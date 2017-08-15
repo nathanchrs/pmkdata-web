@@ -33,7 +33,7 @@ export function fetchEvents ({ page, perPage, search, sort, filters } = {}) {
     endpoint: '/api/events',
     method: 'GET',
     query: { page, perPage, search, sort, ...filters },
-    types: [FETCH_EVENTS_REQUEST, createPaginatedApiResponse(FETCH_EVENTS_SUCCESS, 'events'), FETCH_EVENTS_FAILURE]
+    types: [FETCH_EVENTS_REQUEST, createPaginatedApiResponse(FETCH_EVENTS_SUCCESS, 'events', { search, sort, filters }), FETCH_EVENTS_FAILURE]
   });
 }
 

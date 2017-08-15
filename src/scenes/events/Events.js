@@ -1,26 +1,58 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
 import { fetchEvents, deleteEvent } from '../../services/events/actions';
 import { fetchMentors } from '../../services/mentors/actions';
-import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm, Modal } from 'semantic-ui-react';
+import { userStatuses, enumText } from '../../common/enums';
+import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
 import EditEvent, { EDIT_EVENT_FORM } from './EditEvent';
 import CreateEvent, { CREATE_EVENT_FORM } from './CreateEvent';
 import { createMentor } from '../../services/mentors/actions';
 import { initialize } from 'redux-form';
+import EventId from './EventById';
+import SearchBox from '../../common/components/SearchBox';
+
+const StatusMentor = ({ mentors, event, createMentor, username }) => {
+  const mentor = mentors.data ? mentors.data.find(mentor => mentor.event_id === event.id && mentor.mentor_username === username) : undefined;
+  if(mentor === undefined) {
+    return (
+      <Table.Cell>
+        <Button positive onClick={(e) => createMentor(e, event.id)}>Registrasi</Button>
+      </Table.Cell>
+    );
+  }
+
+  return (
+    <Table.Cell
+      negative={mentor.status === 'disabled'}
+      warning={mentor.status === 'awaiting_validation'}
+    >
+    {enumText(userStatuses, mentor.status)}
+    </Table.Cell>
+  );
+}
 
 class Events extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editing: false, editingEvent: null, creating: false, warningOpen: false, creatingOpen: false};
+    this.state = { 
+      editing: false, 
+      editingEvent: null, 
+      creating: false, 
+      warningOpen: false, 
+      search: ''
+    };
   }
 
   componentDidMount() {
+    this.resetSearch();
     this.props.fetchEventsDispatcher(this.props.events);
-    this.props.isSupervisor ? this.props.fetchMentorsDispatcher(this.props.mentors) : this.props.fetchMentorsDispatcher({filters: {filter: "{\"username\":\"" + this.props.username + "\"}"}});
+    this.props.isSupervisor ? this.props.fetchMentorsDispatcher(this.props.mentors) : this.props.fetchMentorsDispatcher({filters: {filter: this.props.username }});
   }
 
+  // ------------ Editing
   handleEditStart = (event, { id, name, description }) => {
     this.props.initEditEventFormDispatcher({ id, name, description });
     this.setState({ editing: true, editingEvent: { id, name, description } });
@@ -30,19 +62,12 @@ class Events extends React.Component {
     this.setState({ editing: false, editingEvent: null });
   };
 
-  handleCreatingOpen = (e) => this.setState({
-    creatingOpen: true,
-  });
-
-  handleCreatingClose = (e) => this.setState({
-    creatingOpen: false,
-  });
-
-  handleCreateMentor= (event, id) => {
+  // ------------ Daftar mentor
+  handleCreateMentor = (e, id) => { 
     this.props.createMentorByEventDispatcher({ mentor_username: this.props.username, event_id: id });
-    this.handleWarningClose(event);
   };
 
+  // ------------ New event
   handleCreateStart = () => {
     this.props.initCreateEventFormDispatcher();
     this.setState({ creating: true });
@@ -52,6 +77,7 @@ class Events extends React.Component {
     this.setState({ creating: false });
   };
 
+  // ------------ Delete event
   handleWarningOpen = (e) => this.setState({
     warningOpen: true,
   });
@@ -65,8 +91,25 @@ class Events extends React.Component {
     this.handleWarningClose(event);
   }
 
+  // Search Box
+  resetSearch = () => {
+    this.setState({ search: ''});
+    this.props.fetchEventsDispatcher(Object.assign(this.props.events, {search: this.state.search}));
+  }
+  
+  handleSearch = (search) => {
+    this.setState({ search });
+    this.props.fetchEventsDispatcher(Object.assign(this.props.events, {search: this.state.search}));
+  }
+
   render() {
-    const { events, mentors, isSupervisor, fetchEventsDispatcher } = this.props;
+    const { events, mentors, isSupervisor, username, fetchEventsDispatcher } = this.props;
+    let colSpan = 4;
+    
+    if(this.props.match.params.id) {
+       return isSupervisor ? <EventId id={this.props.match.params.id} /> : <Redirect to='/events' />;
+    }
+
     return (
       <AppLayout section='events'>
         <Header floated='left'>Event</Header>
@@ -78,6 +121,15 @@ class Events extends React.Component {
         }
         <Table compact selectable attached={events.error ? 'top' : null}>
           <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell colSpan={isSupervisor ? colSpan+2 : colSpan}>
+                <
+                  SearchBox 
+                  dispatcher={this.props.fetchEventsDispatcher}
+                  storeKey='events' 
+                />
+              </Table.HeaderCell>
+            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>id</Table.HeaderCell>
               <Table.HeaderCell>Nama</Table.HeaderCell>
@@ -97,36 +149,16 @@ class Events extends React.Component {
           <Table.Body>
             {events.data ? events.data.map((event) => (
               <Table.Row key={event.id}>
-                <Table.Cell>{event.id}</Table.Cell>
+                <Table.Cell>{isSupervisor ? <Link to={'/events/' + event.id}>{event.id}</Link> : event.id}</Table.Cell>
                 <Table.Cell>{event.name}</Table.Cell>
                 <Table.Cell>{event.description}</Table.Cell>
-                {mentors.data.some(mentor => mentor.event_id === event.id && mentor.mentor_username === this.props.username) ?
-                    <Table.Cell>
-                      Anda sudah mendaftarkan diri menjadi mentor
-                    </Table.Cell>
-                  :
-                    <Table.Cell>
-                      <Modal
-                        trigger={<Button positive onClick={this.handleCreatingOpen} content="Registrasi" />}
-                        open={this.state.creatingOpen}
-                        onClose={this.handleCreatingClose}
-                        size='small'
-                      >
-                        <Header icon='browser' content={'Pendaftaran Mentor ' + event.name} />
-                        <Modal.Content>
-                          <h3>Daftar jadi mentor di event : {event.name} ?</h3>
-                        </Modal.Content>
-                        <Modal.Actions>
-                          <Button color='red' onClick={this.handleCreatingClose} inverted>
-                            <Icon name='checkmark' /> Tidak
-                          </Button>
-                          <Button color='green' onClick={(e) => this.handleCreateMentor(e, event.id)} inverted>
-                            <Icon name='checkmark' /> Ya
-                          </Button>                      
-                        </Modal.Actions>
-                      </Modal>
-                    </Table.Cell>
-                }
+                <
+                  StatusMentor 
+                  event={event} 
+                  mentors={mentors}
+                  createMentor={this.handleCreateMentor} 
+                  username={username} 
+                />
                 {
                   isSupervisor &&
                   <Table.Cell><Button icon="edit" onClick={(e) => this.handleEditStart(e, event)} /></Table.Cell>
@@ -161,7 +193,7 @@ class Events extends React.Component {
 
         <PageMenu floated='right' size='mini' storeKey='events' onPageChange={fetchEventsDispatcher} />
 
-        <Dimmer inverted active={events.isFetching}><Loader size='big' /></Dimmer>
+        <Dimmer inverted active={events.isFetching || mentors.isFetching}><Loader size='big' /></Dimmer>
         <EditEvent open={this.state.editing} readOnlyValues={this.state.editingEvent || {}} onClose={this.handleEditDone} />
         <CreateEvent open={this.state.creating} onClose={this.handleCreateDone} />
       </AppLayout>

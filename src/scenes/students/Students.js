@@ -7,6 +7,7 @@ import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 's
 import EditStudent, { EDIT_STUDENT_FORM } from './EditStudent';
 import { initialize } from 'redux-form';
 import moment from 'moment';
+import SearchBox from '../../common/components/SearchBox';
 
 class Students extends React.Component {
   constructor(props) {
@@ -48,6 +49,15 @@ class Students extends React.Component {
 
         <Table collapsing compact selectable attached={students.error ? 'top' : null}>
           <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell colSpan={16}>
+                <
+                  SearchBox 
+                  dispatcher={this.props.fetchStudentsDispatcher}
+                  storeKey='students'
+                />
+              </Table.HeaderCell>
+            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>id</Table.HeaderCell>
               <Table.HeaderCell>NIM TPB</Table.HeaderCell>

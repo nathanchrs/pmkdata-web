@@ -16,9 +16,9 @@ export function setPerPage (storeKey, perPage) {
   };
 }
 
-export function createPaginatedApiResponse (type, storeKey = '') {
+export function createPaginatedApiResponse (type, storeKey = '', query = {}) {
   return {
     type,
-    meta: { pagination: { storeKey } }
+    meta: { pagination: { storeKey }, query }
   };
 }

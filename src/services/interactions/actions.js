@@ -29,11 +29,12 @@ export function createInteraction (body) {
 }
 
 export function fetchInteractions ({ page, perPage, search, sort, filters } = {}) {
+  console.log(filters);
   return createApiAction({
     endpoint: '/api/interactions',
     method: 'GET',
     query: { page, perPage, search, sort, ...filters },
-    types: [FETCH_INTERACTIONS_REQUEST, createPaginatedApiResponse(FETCH_INTERACTIONS_SUCCESS, 'interactions'), FETCH_INTERACTIONS_FAILURE]
+    types: [FETCH_INTERACTIONS_REQUEST, createPaginatedApiResponse(FETCH_INTERACTIONS_SUCCESS, 'interactions', { search, sort, filters }), FETCH_INTERACTIONS_FAILURE]
   });
 }
 

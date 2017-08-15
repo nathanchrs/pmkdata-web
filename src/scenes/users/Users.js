@@ -7,6 +7,7 @@ import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 's
 import EditUser, { EDIT_USER_FORM } from './EditUser'
 import { initialize } from 'redux-form';
 import { enumText, userStatuses, userRoles } from '../../common/enums';
+import SearchBox from '../../common/components/SearchBox';
 
 class Users extends React.Component {
   constructor(props) {
@@ -28,11 +29,11 @@ class Users extends React.Component {
   };
 
   handleWarningOpen = (e) => this.setState({
-    warningOpen: true,
+    warningOpen: true
   });
 
   handleWarningClose = (e) => this.setState({
-    warningOpen: false,
+    warningOpen: false
   });
 
   handleDelete = (event, id) => {
@@ -48,6 +49,15 @@ class Users extends React.Component {
 
         <Table compact selectable attached={users.error ? 'top' : null}>
           <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell colSpan={7}>
+                <
+                  SearchBox 
+                  dispatcher={this.props.fetchUsersDispatcher}
+                  storeKey='users'
+                />
+              </Table.HeaderCell>
+            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>Username</Table.HeaderCell>
               <Table.HeaderCell>NIM</Table.HeaderCell>

@@ -20,6 +20,10 @@ export default function addPagination (reducer, storeKey = '') {
     } if (action.payload && action.meta && action.meta.pagination && action.meta.pagination.storeKey === storeKey) {
       let newState = cloneDeep(state);
       newState.lastPage = action.payload.lastPage;
+      newState.search = action.meta.query.search;
+      newState.sort = action.meta.query.sort;
+      newState.filters = action.meta.query.filters;
+      console.log(newState);
       return reducer(newState, action);
     } else {
       return reducer(state, action);

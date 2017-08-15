@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Container, Divider, Form, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Header, Message, Segment, Image } from 'semantic-ui-react';
 import { reduxForm, SubmissionError } from 'redux-form';
 import ControlledField from '../../common/components/ControlledField';
 import { createValidator } from '../../common/validation';
 import commonSchemas from '../../common/schemas';
 import { Redirect, Link } from 'react-router-dom';
 import { register } from '../../services/users/actions';
+import header from '../../common/resources/Header-PMK-ITB-Wide.png';
 
 class Register extends React.Component {
   render () {
@@ -19,10 +20,11 @@ class Register extends React.Component {
 
     return (
       <Container style={{ width: '360px', paddingTop: '6vw' }}>
-        <Segment>
+        <Segment inverted>
+          <Image src={header} fluid />
           <Header size='huge' textAlign='center'>Daftar</Header>
           <Divider hidden />
-          <Form onSubmit={handleSubmit(submitDispatcher)} error={!!error}>
+          <Form onSubmit={handleSubmit(submitDispatcher)} error={!!error} inverted>
             <ControlledField name='nim' label='NIM' icon='hashtag' iconPosition='left' />
             <ControlledField name='email' label='Email' icon='mail' iconPosition='left' />
             <ControlledField name='username' label='Username' icon='user' iconPosition='left' />

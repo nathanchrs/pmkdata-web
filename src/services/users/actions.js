@@ -37,7 +37,7 @@ export function fetchUsers ({ page, perPage, search, sort, filters } = {}) {
     endpoint: '/api/users',
     method: 'GET',
     query: { page, perPage, search, sort, ...filters },
-    types: [FETCH_USERS_REQUEST, createPaginatedApiResponse(FETCH_USERS_SUCCESS, 'users'), FETCH_USERS_FAILURE]
+    types: [FETCH_USERS_REQUEST, createPaginatedApiResponse(FETCH_USERS_SUCCESS, 'users', { search, sort, filters }), FETCH_USERS_FAILURE]
   });
 }
 
