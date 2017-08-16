@@ -142,7 +142,7 @@ class Students extends React.Component {
               </Table.Row>
             )) :
               <Table.Row>
-                <Table.Cell colSpan='7'><i>Tidak ada data yang sesuai.</i></Table.Cell>
+                <Table.Cell colSpan='18'><i>Tidak ada data yang sesuai.</i></Table.Cell>
               </Table.Row>
             }
           </Table.Body>
@@ -160,7 +160,7 @@ class Students extends React.Component {
 
         <Confirm
           open={!!this.state.deleteConfirmStudent}
-          content={'Yakin ingin menghapus data anggota '
+          content={'Yakin ingin menghapus data anggota dengan ID '
           + (this.state.deleteConfirmStudent && this.state.deleteConfirmStudent.id) + '?'}
           confirmButton='Hapus'
           cancelButton='Batal'

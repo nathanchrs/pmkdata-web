@@ -25,8 +25,7 @@ class EditStudent extends React.Component {
               <ControlledField name='tpb_nim' label='NIM TPB'/>
               <ControlledField name='nim' label='NIM'/>
               <ControlledField name='gender' label='Jenis kelamin' fluid component={Select} options={genders}/>
-              <ControlledField name='birth_date' label='Tanggal lahir' component={Datetime}
-                               timeFormat={false} viewMode='years'/>
+              <ControlledField name='birth_date' label='Tanggal lahir' component={Datetime} dateOnly viewMode='years'/>
               <ControlledField name='phone' label='Telepon'/>
               <ControlledField name='parent_phone' label='Telepon orangtua'/>
               <ControlledField name='line' label='LINE'/>
@@ -34,7 +33,6 @@ class EditStudent extends React.Component {
               <ControlledField name='hometown_address' label='Alamat asal' component={TextArea}/>
               <ControlledField name='high_school' label='Asal sekolah'/>
               <ControlledField name='church' label='Gereja'/>
-              <Message error>{error}</Message>
               <Message error>{error}</Message>
             </Form>
           </Modal.Description>
