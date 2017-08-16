@@ -5,6 +5,10 @@ export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 
+export const CREATE_USER_REQUEST = 'CREATE_USER_REQUEST';
+export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
+export const CREATE_USER_FAILURE = 'CREATE_USER_FAILURE';
+
 export const FETCH_USERS_REQUEST = 'FETCH_USERS_REQUEST';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
 export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE';
@@ -23,20 +27,31 @@ export function register (body) {
       return Promise.resolve();
     }
 
-    return dispatch(createApiAction({
-      endpoint: '/api/users',
-      method: 'POST',
-      body,
-      types: [REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE]
-    }));
+    return (dispatch) => {
+      return dispatch(createApiAction({
+        endpoint: '/api/users',
+        method: 'POST',
+        body,
+        types: [REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE]
+      }));
+    };
   };
 }
 
-export function fetchUsers ({ page, perPage, search, sort, filters } = {}) {
+export function createUser (body) {
+  return createApiAction({
+    endpoint: '/api/users',
+    method: 'POST',
+    body,
+    types: [CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_FAILURE]
+  });
+}
+
+export function fetchUsers ({page, perPage, search, sort, filters} = {}) {
   return createApiAction({
     endpoint: '/api/users',
     method: 'GET',
-    query: { page, perPage, search, sort, ...filters },
+    query: {page, perPage, search, sort, ...filters},
     types: [FETCH_USERS_REQUEST, createPaginatedApiResponse(FETCH_USERS_SUCCESS, 'users'), FETCH_USERS_FAILURE]
   });
 }
@@ -46,7 +61,10 @@ export function updateUser (username, body) {
     endpoint: '/api/users/' + username,
     method: 'PATCH',
     body,
-    types: [UPDATE_USER_REQUEST, { type: UPDATE_USER_SUCCESS, meta: { updateKey: username, updateBody: body } }, UPDATE_USER_FAILURE]
+    types: [UPDATE_USER_REQUEST, {
+      type: UPDATE_USER_SUCCESS,
+      meta: {updateKey: username, updateBody: body}
+    }, UPDATE_USER_FAILURE]
   });
 }
 
@@ -54,6 +72,6 @@ export function deleteUser (username) {
   return createApiAction({
     endpoint: '/api/users/' + username,
     method: 'DELETE',
-    types: [DELETE_USER_REQUEST, { type: DELETE_USER_SUCCESS, meta: { deleteKey: username } }, DELETE_USER_FAILURE]
+    types: [DELETE_USER_REQUEST, {type: DELETE_USER_SUCCESS, meta: {deleteKey: username}}, DELETE_USER_FAILURE]
   });
 }

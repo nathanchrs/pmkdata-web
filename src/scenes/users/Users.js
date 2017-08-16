@@ -2,102 +2,117 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
-import { fetchUsers, deleteUser } from '../../services/users/actions';
+import { fetchUsers, deleteUser, updateUser } from '../../services/users/actions';
 import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
 import EditUser, { EDIT_USER_FORM } from './EditUser'
+import CreateUser, { CREATE_USER_FORM } from './CreateUser'
 import { initialize } from 'redux-form';
 import { enumText, userStatuses, userRoles } from '../../common/enums';
 
 class Users extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
-    this.state = { editing: false, editingUser: null, warningOpen: false };
+    this.state = {creatingUser: false, editingUser: null, deleteConfirmUser: null};
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchUsersDispatcher(this.props.users);
   }
 
-  handleEditStart = (event, { username, nim, email, role, status }) => {
-    this.props.initEditUserFormDispatcher({ nim, email, role, status });
-    this.setState({ editing: true, editingUser: { username, nim, email, role, status } });
+  handleCreateStart = () => {
+    this.props.initCreateUserFormDispatcher();
+    this.setState({creatingUser: true});
   };
 
-  handleEditDone = () => {
-    this.setState({ editing: false, editingUser: null });
+  handleEditStart = ({username, nim, email, role, status}) => {
+    this.props.initEditUserFormDispatcher({nim, email, role, status});
+    this.setState({editingUser: {username, nim, email, role, status}});
   };
 
-  handleWarningOpen = (e) => this.setState({
-    warningOpen: true,
-  });
-
-  handleWarningClose = (e) => this.setState({
-    warningOpen: false,
-  });
-
-  handleDelete = (event, id) => {
-    this.props.deleteUserDispatcher(id);
-    this.handleWarningClose(event);
-  }
-
-  render() {
-    const { users, isSupervisor, fetchUsersDispatcher } = this.props;
+  render () {
+    const {users, fetchUsersDispatcher, deleteUserDispatcher, validateUserDispatcher} = this.props;
     return (
       <AppLayout section='users'>
-        <Header>Akun</Header>
+        <Header>
+          Akun
+        </Header>
+        <Button primary icon='add' onClick={this.handleCreateStart}/>
 
         <Table compact selectable attached={users.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
+              <Table.HeaderCell collapsing></Table.HeaderCell>
               <Table.HeaderCell>Username</Table.HeaderCell>
               <Table.HeaderCell>NIM</Table.HeaderCell>
+              <Table.HeaderCell>Nama</Table.HeaderCell>
               <Table.HeaderCell>Email</Table.HeaderCell>
               <Table.HeaderCell>Jenis akun</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Edit</Table.HeaderCell>
-              <Table.HeaderCell>Delete</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
             {users.data ? users.data.map((user) => (
               <Table.Row key={user.username}>
+                <Table.Cell collapsing>
+                  <Button size='mini' circular content='Edit' icon="edit"
+                          onClick={() => this.handleEditStart(user)}/>
+                  <Button size='mini' circular icon="trash" basic negative
+                          onClick={() => this.setState({deleteConfirmUser: user})}/>
+                </Table.Cell>
                 <Table.Cell>{user.username}</Table.Cell>
                 <Table.Cell>{user.nim}</Table.Cell>
+                <Table.Cell>{user.name}</Table.Cell>
                 <Table.Cell>{user.email}</Table.Cell>
                 <Table.Cell>{enumText(userRoles, user.role)}</Table.Cell>
-                <Table.Cell
-                  negative={user.status === 'disabled'}
-                  warning={user.status === 'awaiting_validation'}>
+                <Table.Cell negative={user.status === 'disabled'}>
                   {enumText(userStatuses, user.status)}
+                  { user.status === 'awaiting_validation' &&
+                  <Button style={{marginLeft: '5px'}} size='mini' circular primary content='Validasi' icon="check"
+                          onClick={() => validateUserDispatcher(user.username)}/>
+                  }
                 </Table.Cell>
-                <Table.Cell><Button icon="edit" onClick={(e) => this.handleEditStart(e, user)} /></Table.Cell>
-                <Table.Cell><Button icon="delete" negative onClick={this.handleWarningOpen} /></Table.Cell>
-                <Confirm
-                  open={this.state.warningOpen}
-                  content='This action cannot be undone!'
-                  onCancel={this.handleWarningClose}
-                  onConfirm={(e) => this.handleDelete(e, user.username)}
-                />
               </Table.Row>
             )) :
               <Table.Row>
-                <Table.Cell colSpan='5'><i>Tidak ada data yang sesuai.</i></Table.Cell>
+                <Table.Cell colSpan='7'><i>Tidak ada data yang sesuai.</i></Table.Cell>
               </Table.Row>
             }
           </Table.Body>
         </Table>
 
         {users.error &&
-          <Message error attached='bottom'>
-            <Icon name='warning sign'/> {users.error}
-          </Message>
+        <Message error attached='bottom'>
+          <Icon name='warning sign'/> {users.error}
+        </Message>
         }
 
-        <PageMenu floated='right' size='mini' storeKey='users' onPageChange={fetchUsersDispatcher} />
+        <PageMenu floated='right' size='mini' storeKey='users' onPageChange={fetchUsersDispatcher}/>
 
-        <Dimmer inverted active={users.isFetching}><Loader size='big' /></Dimmer>
-        <EditUser open={this.state.editing} readOnlyValues={this.state.editingUser || {}} onClose={this.handleEditDone} />
+        <Dimmer inverted active={users.isFetching}><Loader size='big'/></Dimmer>
+
+        <Confirm
+          open={!!this.state.deleteConfirmUser}
+          content={'Yakin ingin menghapus akun '
+          + (this.state.deleteConfirmUser && this.state.deleteConfirmUser.username) + '?'}
+          confirmButton='Hapus'
+          cancelButton='Batal'
+          onCancel={() => this.setState({deleteConfirmUser: null})}
+          onConfirm={() => {
+            deleteUserDispatcher(this.state.deleteConfirmUser && this.state.deleteConfirmUser.username);
+            this.setState({deleteConfirmUser: null})
+          }
+          }
+        />
+
+        <CreateUser open={this.state.creatingUser}
+                    onClose={() => this.setState({creatingUser: false})}
+        />
+
+        <EditUser open={!!this.state.editingUser}
+                  readOnlyValues={this.state.editingUser || {}}
+                  onClose={() => this.setState({editingUser: null})}
+        />
 
       </AppLayout>
     );
@@ -106,16 +121,17 @@ class Users extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    users: state.users,
-    isSupervisor: state.session.user && (state.session.user.role === 'supervisor' || state.session.user.role === 'admin')
+    users: state.users
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchUsersDispatcher: (pageInfo) => dispatch(fetchUsers(pageInfo)),
+    initCreateUserFormDispatcher: initialValues => dispatch(initialize(CREATE_USER_FORM)),
     initEditUserFormDispatcher: initialValues => dispatch(initialize(EDIT_USER_FORM, initialValues)),
-    deleteUserDispatcher: (username) => dispatch(deleteUser(username))
+    deleteUserDispatcher: (username) => dispatch(deleteUser(username)),
+    validateUserDispatcher: (username) => dispatch(updateUser(username, {status: 'active'}))
   };
 };
 
