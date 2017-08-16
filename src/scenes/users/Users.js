@@ -8,6 +8,7 @@ import EditUser, { EDIT_USER_FORM } from './EditUser'
 import CreateUser, { CREATE_USER_FORM } from './CreateUser'
 import { initialize } from 'redux-form';
 import { enumText, userStatuses, userRoles } from '../../common/enums';
+import { getFirstSortDirection } from '../../common/utils';
 
 class Users extends React.Component {
   constructor (props) {
@@ -25,6 +26,14 @@ class Users extends React.Component {
 
   handleSearch = () => {
     this.props.fetchUsersDispatcher(Object.assign(this.props.users, {search: this.state.search}));
+  };
+
+  handleSort = (field) => {
+    let sort = [{
+      field,
+      direction: getFirstSortDirection(this.props.users && this.props.users.sort, field) === 'ascending' ? 'descending' : 'ascending'
+    }];
+    this.props.fetchUsersDispatcher(Object.assign(this.props.users, {sort}));
   };
 
   handleCreateStart = () => {
@@ -46,7 +55,7 @@ class Users extends React.Component {
             <Header style={{margin: '5px 0'}}>
               Akun
               {users.search &&
-                <small>{' - hasil pencarian untuk \'' + users.search + '\''}</small>
+              <small>{' - hasil pencarian untuk \'' + users.search + '\''}</small>
               }
             </Header>
           </div>
@@ -56,20 +65,26 @@ class Users extends React.Component {
                    value={this.state.search} onChange={this.handleSearchChange}
                    action={<Button icon='search' onClick={this.handleSearch}/>}
             />
-            <Button primary icon='add' onClick={this.handleCreateStart} />
+            <Button primary icon='add' onClick={this.handleCreateStart}/>
           </div>
         </div>
 
-        <Table compact selectable attached={users.error ? 'top' : null}>
+        <Table compact sortable attached={users.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell collapsing></Table.HeaderCell>
-              <Table.HeaderCell>Username</Table.HeaderCell>
-              <Table.HeaderCell>NIM</Table.HeaderCell>
-              <Table.HeaderCell>Nama</Table.HeaderCell>
-              <Table.HeaderCell>Email</Table.HeaderCell>
-              <Table.HeaderCell>Jenis akun</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'username')}
+                                onClick={() => this.handleSort('username')}>Username</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'nim')}
+                                onClick={() => this.handleSort('nim')}>NIM</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'name')}
+                                onClick={() => this.handleSort('name')}>Nama</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'email')}
+                                onClick={() => this.handleSort('email')}>Email</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'role')}
+                                onClick={() => this.handleSort('role')}>Jenis akun</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'status')}
+                                onClick={() => this.handleSort('status')}>Status</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 

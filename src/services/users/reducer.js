@@ -23,7 +23,7 @@ function usersReducer (state = defaultState, action) {
       }
     case FETCH_USERS_SUCCESS:
       newState = cloneDeep(state);
-      return Object.assign(newState, {data: action.payload.data, isFetching: false, error: false});
+      return Object.assign(newState, action.payload, {isFetching: false, error: false});
     case FETCH_USERS_FAILURE:
       newState = cloneDeep(state);
       return Object.assign(newState, {
