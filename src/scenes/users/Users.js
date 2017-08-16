@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
 import { fetchUsers, deleteUser, updateUser } from '../../services/users/actions';
-import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
+import { Input, Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
 import EditUser, { EDIT_USER_FORM } from './EditUser'
 import CreateUser, { CREATE_USER_FORM } from './CreateUser'
 import { initialize } from 'redux-form';
@@ -12,12 +12,20 @@ import { enumText, userStatuses, userRoles } from '../../common/enums';
 class Users extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {creatingUser: false, editingUser: null, deleteConfirmUser: null};
+    this.state = {search: '', creatingUser: false, editingUser: null, deleteConfirmUser: null};
   }
 
   componentDidMount () {
     this.props.fetchUsersDispatcher(this.props.users);
-  }
+  };
+
+  handleSearchChange = (event) => {
+    this.setState({search: event.target.value});
+  };
+
+  handleSearch = () => {
+    this.props.fetchUsersDispatcher(Object.assign(this.props.users, {search: this.state.search}));
+  };
 
   handleCreateStart = () => {
     this.props.initCreateUserFormDispatcher();
@@ -33,10 +41,24 @@ class Users extends React.Component {
     const {users, fetchUsersDispatcher, deleteUserDispatcher, validateUserDispatcher} = this.props;
     return (
       <AppLayout section='users'>
-        <Header>
-          Akun
-        </Header>
-        <Button primary icon='add' onClick={this.handleCreateStart}/>
+        <div style={{display: 'flex'}}>
+          <div>
+            <Header style={{margin: '5px 0'}}>
+              Akun
+              {users.search &&
+                <small>{' - hasil pencarian untuk \'' + users.search + '\''}</small>
+              }
+            </Header>
+          </div>
+
+          <div style={{marginLeft: 'auto'}}>
+            <Input type='text' placeholder='Cari...' style={{marginRight: '10px'}}
+                   value={this.state.search} onChange={this.handleSearchChange}
+                   action={<Button icon='search' onClick={this.handleSearch}/>}
+            />
+            <Button primary icon='add' onClick={this.handleCreateStart} />
+          </div>
+        </div>
 
         <Table compact selectable attached={users.error ? 'top' : null}>
           <Table.Header>
