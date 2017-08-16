@@ -7,7 +7,7 @@ import { Input, Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } 
 import EditStudent, { EDIT_STUDENT_FORM } from './EditStudent'
 import CreateStudent, { CREATE_STUDENT_FORM } from './CreateStudent'
 import { initialize } from 'redux-form';
-import { enumText, departments, genders } from '../../common/enums';
+import { enumText, departments, genders, displayDateFormat, displayDateTimeFormat } from '../../common/constants';
 import { getFirstSortDirection } from '../../common/utils';
 import moment from 'moment';
 
@@ -129,7 +129,7 @@ class Students extends React.Component {
                 <Table.Cell>{student.tpb_nim}</Table.Cell>
                 <Table.Cell>{student.nim}</Table.Cell>
                 <Table.Cell>{enumText(genders, student.gender)}</Table.Cell>
-                <Table.Cell>{moment(student.birth_date).format('D MMMM YYYY')}</Table.Cell>
+                <Table.Cell>{moment(student.birth_date).format(displayDateFormat)}</Table.Cell>
                 <Table.Cell>{student.phone}</Table.Cell>
                 <Table.Cell>{student.parent_phone}</Table.Cell>
                 <Table.Cell>{student.line}</Table.Cell>
@@ -137,8 +137,8 @@ class Students extends React.Component {
                 <Table.Cell>{student.hometown_address}</Table.Cell>
                 <Table.Cell>{student.high_school}</Table.Cell>
                 <Table.Cell>{student.church}</Table.Cell>
-                <Table.Cell>{moment(student.created_at).fromNow()}</Table.Cell>
-                <Table.Cell>{moment(student.updated_at).fromNow()}</Table.Cell>
+                <Table.Cell>{moment(student.created_at).format(displayDateTimeFormat)}</Table.Cell>
+                <Table.Cell>{moment(student.updated_at).format(displayDateTimeFormat)}</Table.Cell>
               </Table.Row>
             )) :
               <Table.Row>

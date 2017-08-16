@@ -3,6 +3,7 @@ import { Field } from 'redux-form';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import Datetime from 'react-datetime';
 import moment from 'moment';
+import { displayDateFormat, displayTimeFormat, storeDateFormat, storeDateTimeFormat } from '../constants';
 
 class ControlledField extends React.Component {
   innerComponent = innerProps => {
@@ -18,11 +19,6 @@ class ControlledField extends React.Component {
     };
 
     if (this.props.component === Datetime) {
-      const displayDateFormat = 'D MMMM YYYY';
-      const displayTimeFormat = 'HH:mm';
-      const storeDateFormat = 'YYYY-MM-DD';
-      const storeDateTimeFormat = 'YYYY-MM-DDTHH:mm:ssZ';
-
       delete actualComponentProps.value;
       actualComponentProps.dateFormat = displayDateFormat;
       if (innerPropsRest.dateOnly) {

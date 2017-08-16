@@ -9,6 +9,7 @@ import CreateInteraction, { CREATE_INTERACTION_FORM } from './CreateInteraction'
 import { initialize } from 'redux-form';
 import { getFirstSortDirection } from '../../common/utils';
 import moment from 'moment';
+import { displayDateTimeFormat } from '../../common/constants';
 
 class Interactions extends React.Component {
   constructor (props) {
@@ -100,11 +101,11 @@ class Interactions extends React.Component {
                 </Table.Cell>
 
                 <Table.Cell>{interaction.id}</Table.Cell>
-                <Table.Cell>{moment(interaction.time).fromNow()}</Table.Cell>
+                <Table.Cell>{moment(interaction.time).format(displayDateTimeFormat)}</Table.Cell>
                 <Table.Cell>{interaction.title}</Table.Cell>
                 <Table.Cell>{interaction.tags}</Table.Cell>
-                <Table.Cell>{moment(interaction.created_at).fromNow()}</Table.Cell>
-                <Table.Cell>{moment(interaction.updated_at).fromNow()}</Table.Cell>
+                <Table.Cell>{moment(interaction.created_at).format(displayDateTimeFormat)}</Table.Cell>
+                <Table.Cell>{moment(interaction.updated_at).format(displayDateTimeFormat)}</Table.Cell>
               </Table.Row>
             )) :
               <Table.Row>

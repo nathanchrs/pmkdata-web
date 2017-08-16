@@ -34,3 +34,9 @@ export const departments = [
 export function enumText (enums, value) {
   return enums.find(item => item.value === value).text;
 }
+
+export const displayDateFormat = 'D MMMM YYYY';
+export const displayTimeFormat = 'HH:mm';
+export const displayDateTimeFormat = displayDateFormat + ' ' + displayTimeFormat;
+export const storeDateFormat = 'YYYY-MM-DD';
+export const storeDateTimeFormat = 'YYYY-MM-DDTHH:mm:ssZ';

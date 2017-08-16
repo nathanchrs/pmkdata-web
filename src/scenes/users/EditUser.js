@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Select, Icon, Modal, Form, Message } from 'semantic-ui-react';
 import ControlledField from '../../common/components/ControlledField';
 import { reduxForm, SubmissionError } from 'redux-form';
-import { userRoles, userStatuses } from '../../common/enums';
+import { userRoles, userStatuses } from '../../common/constants';
 import commonSchemas from '../../common/schemas';
 import { createValidator } from '../../common/validation';
 import { updateUser } from '../../services/users/actions';

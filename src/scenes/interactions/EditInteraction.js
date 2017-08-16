@@ -14,7 +14,7 @@ class EditInteraction extends React.Component {
     const {open, onClose, readOnlyValues, pristine, submitting, error, handleSubmit} = this.props;
     return (
       <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='large'>
-        <Modal.Header>Edit Laporan - {readOnlyValues.id}</Modal.Header>
+        <Modal.Header>Lihat/Edit Laporan - {readOnlyValues.id}</Modal.Header>
         <Modal.Content>
           <Modal.Description>
             <Form onSubmit={handleSubmit(submit)} error={!!error}>

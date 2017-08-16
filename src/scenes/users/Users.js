@@ -7,8 +7,9 @@ import { Input, Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } 
 import EditUser, { EDIT_USER_FORM } from './EditUser'
 import CreateUser, { CREATE_USER_FORM } from './CreateUser'
 import { initialize } from 'redux-form';
-import { enumText, userStatuses, userRoles } from '../../common/enums';
+import { enumText, userStatuses, userRoles, displayDateTimeFormat } from '../../common/constants';
 import { getFirstSortDirection } from '../../common/utils';
+import moment from 'moment';
 
 class Users extends React.Component {
   constructor (props) {
@@ -85,6 +86,10 @@ class Users extends React.Component {
                                 onClick={() => this.handleSort('role')}>Jenis akun</Table.HeaderCell>
               <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'status')}
                                 onClick={() => this.handleSort('status')}>Status</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'created_at')}
+                                onClick={() => this.handleSort('created_at')}>Dibuat pada</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(users.sort, 'updated_at')}
+                                onClick={() => this.handleSort('updated_at')}>Diubah pada</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
@@ -109,6 +114,8 @@ class Users extends React.Component {
                           onClick={() => validateUserDispatcher(user.username)}/>
                   }
                 </Table.Cell>
+                <Table.Cell>{moment(user.created_at).format(displayDateTimeFormat)}</Table.Cell>
+                <Table.Cell>{moment(user.updated_at).format(displayDateTimeFormat)}</Table.Cell>
               </Table.Row>
             )) :
               <Table.Row>
