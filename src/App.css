@@ -15,6 +15,10 @@ body {
   width: 80px;
 }
 
+.ui.pusher {
+  min-width: 700px;
+}
+
 .ui.visible.overlay.sidebar ~ .fixed, .ui.visible.overlay.sidebar ~ .pusher {
   margin-left: 80px;
 }

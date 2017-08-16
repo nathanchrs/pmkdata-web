@@ -69,7 +69,7 @@ class Users extends React.Component {
           </div>
         </div>
 
-        <Table compact sortable attached={users.error ? 'top' : null}>
+        <Table compact sortable unstackable attached={users.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell collapsing></Table.HeaderCell>
