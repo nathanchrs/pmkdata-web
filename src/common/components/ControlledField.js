@@ -19,11 +19,11 @@ class ControlledField extends React.Component {
     };
 
     if (this.props.component === Datetime) {
-      delete actualComponentProps.value;
+      actualComponentProps.value = moment(value);
       actualComponentProps.dateFormat = displayDateFormat;
       if (innerPropsRest.dateOnly) {
         actualComponentProps.timeFormat = false;
-        actualComponentProps.onChange = (data) => input.onChange(moment(data).format(storeDateFormat))
+        actualComponentProps.onChange = (data) => input.onChange(moment(data).format(storeDateFormat));
       } else {
         actualComponentProps.timeFormat = displayTimeFormat;
         actualComponentProps.onChange = (data) => input.onChange(moment(data).format(storeDateTimeFormat));

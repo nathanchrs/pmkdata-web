@@ -197,7 +197,7 @@ const mapDispatchToProps = dispatch => {
     fetchStudentsDispatcher: (pageInfo) => dispatch(fetchStudents(pageInfo)),
     initCreateStudentFormDispatcher: initialValues => dispatch(initialize(CREATE_STUDENT_FORM)),
     initEditStudentFormDispatcher: initialValues => dispatch(initialize(EDIT_STUDENT_FORM, initialValues)),
-    deleteStudentDispatcher: (id) => dispatch(deleteStudent(id)),
+    deleteStudentDispatcher: (id) => dispatch(deleteStudent(id))
   };
 };
 
