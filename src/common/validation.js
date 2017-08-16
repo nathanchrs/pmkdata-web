@@ -5,7 +5,8 @@ const ajv = new Ajv({
   coerceTypes: true,
   allErrors: true,
   jsonPointers: true,
-  errorDataPath: 'property'
+  errorDataPath: 'property',
+  format: 'full'
 });
 ajvErrors(ajv);
 

@@ -6,23 +6,40 @@ import moment from 'moment';
 
 class ControlledField extends React.Component {
   innerComponent = innerProps => {
-    const {input, meta, timeFormat, ...innerPropsRest} = innerProps;
-    const onChange = this.props.component === Datetime ?
-      (data) => input.onChange(data.format(timeFormat ? undefined : 'YYYY-MM-DD'))
-      : (event, data) => input.onChange(data.value);
-    const {value, inputRest} = input;
+    const {input, meta, ...innerPropsRest} = innerProps;
+    let {value, inputRest} = input;
     let actualComponentProps = {
       ...innerPropsRest,
-      value: this.props.component === Datetime ? value && moment(value).format('D MMMM YYYY') : value,
+      value,
       ...inputRest,
-      onChange
+      onChange: (event, data) => input.onChange(data.value),
+      error: meta.touched && meta.invalid,
+      loading: meta.asyncValidating
     };
-    const error = meta.touched && meta.invalid;
-    const loading = meta.asyncValidating;
-    if (this.props.component !== TextArea) {
-      actualComponentProps.error = error;
-      actualComponentProps.loading = loading;
+
+    if (this.props.component === Datetime) {
+      const displayDateFormat = 'D MMMM YYYY';
+      const displayTimeFormat = 'HH:mm';
+      const storeDateFormat = 'YYYY-MM-DD';
+      const storeDateTimeFormat = 'YYYY-MM-DDTHH:mm:ssZ';
+
+      delete actualComponentProps.value;
+      actualComponentProps.dateFormat = displayDateFormat;
+      if (innerPropsRest.dateOnly) {
+        actualComponentProps.timeFormat = false;
+        actualComponentProps.onChange = (data) => input.onChange(moment(data).format(storeDateFormat))
+      } else {
+        actualComponentProps.timeFormat = displayTimeFormat;
+        actualComponentProps.onChange = (data) => input.onChange(moment(data).format(storeDateTimeFormat));
+      }
     }
+
+    const error = actualComponentProps.error;
+    if (this.props.component === TextArea) {
+      delete actualComponentProps.error;
+      delete actualComponentProps.loading;
+    }
+
     return (
       <Form.Field style={{marginBottom: '14px'}}>
         <label>{this.props.label}</label>

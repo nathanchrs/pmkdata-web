@@ -32,13 +32,13 @@ const schemas = {
   datetime: {
     'type': 'string',
     'format': 'date-time',
-    'errorMessage': 'Format tanggal dan waktu tidak dikenali'
+    'errorMessage': 'Tanggal dan/atau waktu tidak valid'
   },
 
   date: {
     'type': 'string',
     'format': 'date',
-    'errorMessage': 'Format tanggal tidak dikenali'
+    'errorMessage': 'Tanggal tidak valid'
   },
 
   year: {

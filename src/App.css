@@ -28,3 +28,10 @@ body {
   background: #fff6f6;
   border-color: #e0b4b4;
 }
+
+.field textarea {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  line-height: 1.21428571em;
+  padding: .67857143em 1em;
+  font-size: 1em;
+}
