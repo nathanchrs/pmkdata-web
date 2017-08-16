@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Container, Divider, Icon, Menu, Sidebar } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { logout } from '../../services/session/actions';
 import pmkLogo from '../resources/pmklogo.png';
 
 class AppLayout extends React.Component {
   render () {
-    const { isSupervisor, section } = this.props;
+    const { isSupervisor, section, onLogout, history } = this.props;
     return (
       <Sidebar.Pushable>
         <Sidebar as={Menu} borderless animation='overlay' width='very thin' visible vertical inverted icon='labeled' size='tiny'>
@@ -15,21 +15,15 @@ class AppLayout extends React.Component {
           <Menu.Item header><img src={pmkLogo} alt='PMK ITB logo' /><br /><br />PMK ITB</Menu.Item>
 
           <Divider />
-          <Menu.Item active={section === 'events'} name='events' link as={Link} to='/events'>
-            <Icon name='calendar outline' />Kegiatan
-          </Menu.Item>
-          <Menu.Item active={section === 'mentors'} name='mentors' link as={Link} to='/mentors'>
-            <Icon name='street view' />Mentor
-          </Menu.Item>
           <Menu.Item active={section === 'interactions'} name='interactions' link as={Link} to='/interactions'>
-            <Icon name='file text' />Interaksi
+            <Icon name='file text' />Laporan
           </Menu.Item>
 
           {isSupervisor && (
             <div>
               <Divider />
               <Menu.Item active={section === 'students'} name='students' link as={Link} to='/students'>
-                <Icon name='users' />Anggota
+                <Icon name='users' />Data Anggota
               </Menu.Item>
               <Menu.Item active={section === 'users'} name='users' link as={Link} to='/users'>
                 <Icon name='address book outline' />Akun
@@ -38,7 +32,7 @@ class AppLayout extends React.Component {
           )}
 
           <Divider />
-          <Menu.Item name='logout' link onClick={this.props.onLogout}>
+          <Menu.Item name='logout' link onClick={() => onLogout(history)} style={{ wordWrap: 'break-word' }}>
             <Icon name='log out' />Logout ({this.props.username})
           </Menu.Item>
 
@@ -60,10 +54,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onLogout: () => { dispatch(logout()); }
+    onLogout: (history) => { dispatch(logout(history)); }
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppLayout);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppLayout));

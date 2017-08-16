@@ -26,7 +26,7 @@ export function login (body) {
   };
 }
 
-export function logout () {
+export function logout (history) {
   return async (dispatch, getState) => {
     if (!getState().session.user) {
       return Promise.resolve();
@@ -37,6 +37,7 @@ export function logout () {
       types: [LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE]
     }));
     dispatch(clearSession());
+    history.push('/');
     return response;
   };
 }
