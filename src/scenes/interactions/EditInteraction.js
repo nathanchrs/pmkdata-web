@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Icon, Modal, Form, Message, TextArea } from 'semantic-ui-react';
 import ControlledField from '../../common/components/ControlledField';
 import { reduxForm, SubmissionError } from 'redux-form';
-import DatePicker from '../../common/components/DatePicker';
+import Datetime from 'react-datetime';
 import commonSchemas from '../../common/schemas';
 import { createValidator } from '../../common/validation';
 import { updateInteraction } from '../../services/interactions/actions';
@@ -19,7 +19,7 @@ class EditInteraction extends React.Component {
         <Modal.Content>
           <Modal.Description>
             <Form onSubmit={handleSubmit(submit)} error={!!error}>
-              <ControlledField name='time' label='Waktu' component={DatePicker} timeFormat />
+              <ControlledField name='time' label='Waktu' component={Datetime} />
               <ControlledField name='notes' label='Catatan' component={TextArea} />
               <ControlledField name='tags' label='Tags' />
               <Message error>{error}</Message>

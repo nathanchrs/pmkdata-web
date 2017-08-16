@@ -6,6 +6,7 @@ import { genders, departments } from '../../common/enums';
 import commonSchemas from '../../common/schemas';
 import { createValidator } from '../../common/validation';
 import { updateStudent } from '../../services/students/actions';
+import Datetime from 'react-datetime';
 
 export const EDIT_STUDENT_FORM = 'editStudent';
 
@@ -13,19 +14,19 @@ class EditStudent extends React.Component {
   render () {
     const {open, onClose, readOnlyValues, pristine, submitting, error, handleSubmit} = this.props;
     return (
-      <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='mini'>
+      <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='tiny'>
         <Modal.Header>Edit Data Anggota - {readOnlyValues.id}</Modal.Header>
         <Modal.Content>
           <Modal.Description>
             <Form onSubmit={handleSubmit(submit)} error={!!error}>
-              <ControlledField name='id' label='ID'/>
               <ControlledField name='name' label='Nama'/>
               <ControlledField name='year' label='Angkatan'/>
               <ControlledField name='department' label='Fakultas/prodi' fluid component={Select} options={departments}/>
               <ControlledField name='tpb_nim' label='NIM TPB'/>
               <ControlledField name='nim' label='NIM'/>
               <ControlledField name='gender' label='Jenis kelamin' fluid component={Select} options={genders}/>
-              <ControlledField name='birth_date' label='Tanggal lahir'/>
+              <ControlledField name='birth_date' label='Tanggal lahir' component={Datetime}
+                               timeFormat={false} viewMode='years'/>
               <ControlledField name='phone' label='Telepon'/>
               <ControlledField name='parent_phone' label='Telepon orangtua'/>
               <ControlledField name='line' label='LINE'/>

@@ -27,8 +27,7 @@ export const departments = [
   { key: 'SAPPK', value: 'SAPPK', text: 'Sekolah Arsitektur, Perencanaan dan Pengembangan Kebijakan' },
   { key: 'SBM', value: 'SBM', text: 'Sekolah Bisnis dan Manajemen' },
   { key: 'SF', value: 'SF', text: 'Sekolah Farmasi' },
-  { key: 'SITH-S', value: 'SITH-S', text: 'Sekolah Ilmu dan Teknologi Hayati - Program Sains' },
-  { key: 'SITH-R', value: 'SITH-R', text: 'Fakultas Ilmu Teknologi Kebumian - Program Rekayasa' },
+  { key: 'SITH', value: 'SITH', text: 'Sekolah Ilmu dan Teknologi Hayati' },
   { key: 'STEI', value: 'STEI', text: 'Sekolah Teknik Elektro dan Informatika' }
 ];
 

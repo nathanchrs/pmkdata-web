@@ -7,8 +7,9 @@ import { Input, Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } 
 import EditStudent, { EDIT_STUDENT_FORM } from './EditStudent'
 import CreateStudent, { CREATE_STUDENT_FORM } from './CreateStudent'
 import { initialize } from 'redux-form';
-import { enumText, studentStatuses, studentRoles } from '../../common/enums';
+import { enumText, departments, genders } from '../../common/enums';
 import { getFirstSortDirection } from '../../common/utils';
+import moment from 'moment';
 
 class Students extends React.Component {
   constructor (props) {
@@ -69,10 +70,10 @@ class Students extends React.Component {
           </div>
         </div>
 
-        <Table compact sortable unstackable attached={students.error ? 'top' : null}>
+        <Table compact sortable singleLine unstackable attached={students.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell collapsing />
+              <Table.HeaderCell collapsing/>
               <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'id')}
                                 onClick={() => this.handleSort('id')}>ID</Table.HeaderCell>
               <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'name')}
@@ -124,11 +125,11 @@ class Students extends React.Component {
                 <Table.Cell>{student.id}</Table.Cell>
                 <Table.Cell>{student.name}</Table.Cell>
                 <Table.Cell>{student.year}</Table.Cell>
-                <Table.Cell>{student.department}</Table.Cell>
+                <Table.Cell>{enumText(departments, student.department)}</Table.Cell>
                 <Table.Cell>{student.tpb_nim}</Table.Cell>
                 <Table.Cell>{student.nim}</Table.Cell>
-                <Table.Cell>{student.gender}</Table.Cell>
-                <Table.Cell>{student.birth_date}</Table.Cell>
+                <Table.Cell>{enumText(genders, student.gender)}</Table.Cell>
+                <Table.Cell>{moment(student.birth_date).format('D MMMM YYYY')}</Table.Cell>
                 <Table.Cell>{student.phone}</Table.Cell>
                 <Table.Cell>{student.parent_phone}</Table.Cell>
                 <Table.Cell>{student.line}</Table.Cell>
@@ -136,8 +137,8 @@ class Students extends React.Component {
                 <Table.Cell>{student.hometown_address}</Table.Cell>
                 <Table.Cell>{student.high_school}</Table.Cell>
                 <Table.Cell>{student.church}</Table.Cell>
-                <Table.Cell>{student.created_at}</Table.Cell>
-                <Table.Cell>{student.updated_at}</Table.Cell>
+                <Table.Cell>{moment(student.created_at).fromNow()}</Table.Cell>
+                <Table.Cell>{moment(student.updated_at).fromNow()}</Table.Cell>
               </Table.Row>
             )) :
               <Table.Row>
@@ -172,12 +173,12 @@ class Students extends React.Component {
         />
 
         <CreateStudent open={this.state.creatingStudent}
-                    onClose={() => this.setState({creatingStudent: false})}
+                       onClose={() => this.setState({creatingStudent: false})}
         />
 
         <EditStudent open={!!this.state.editingStudent}
-                  readOnlyValues={this.state.editingStudent || {}}
-                  onClose={() => this.setState({editingStudent: null})}
+                     readOnlyValues={this.state.editingStudent || {}}
+                     onClose={() => this.setState({editingStudent: null})}
         />
 
       </AppLayout>

@@ -23,3 +23,8 @@ body {
 .ui.visible.overlay.sidebar ~ .fixed, .ui.visible.overlay.sidebar ~ .pusher {
   margin-left: 80px;
 }
+
+.ui.input.error input, .ui.form .field.error textarea {
+  background: #fff6f6;
+  border-color: #e0b4b4;
+}

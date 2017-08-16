@@ -8,6 +8,7 @@ import apiErrorHandlerMiddleware from './services/apiErrorHandler';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import rootReducer from './services/reducer';
 import 'semantic-ui-css/semantic.min.css';
+import 'react-datetime/css/react-datetime.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
