@@ -5,16 +5,16 @@ import { reduxForm, SubmissionError } from 'redux-form';
 import { genders, departments } from '../../common/enums';
 import commonSchemas from '../../common/schemas';
 import { createValidator } from '../../common/validation';
-import { updateStudent } from '../../services/students/actions';
+import { createStudent } from '../../services/students/actions';
 
-export const EDIT_STUDENT_FORM = 'editStudent';
+export const CREATE_STUDENT_FORM = 'createStudent';
 
-class EditStudent extends React.Component {
+class CreateStudent extends React.Component {
   render () {
-    const {open, onClose, readOnlyValues, pristine, submitting, error, handleSubmit} = this.props;
+    const {open, onClose, pristine, submitting, error, handleSubmit} = this.props;
     return (
-      <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='mini'>
-        <Modal.Header>Edit Data Anggota - {readOnlyValues.id}</Modal.Header>
+      <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='tiny'>
+        <Modal.Header>Buat Data Anggota Baru</Modal.Header>
         <Modal.Content>
           <Modal.Description>
             <Form onSubmit={handleSubmit(submit)} error={!!error}>
@@ -34,7 +34,6 @@ class EditStudent extends React.Component {
               <ControlledField name='high_school' label='Asal sekolah'/>
               <ControlledField name='church' label='Gereja'/>
               <Message error>{error}</Message>
-              <Message error>{error}</Message>
             </Form>
           </Modal.Description>
         </Modal.Content>
@@ -49,14 +48,10 @@ class EditStudent extends React.Component {
   }
 }
 
-this.defaultProps = {
-  readOnlyValues: {}
-};
-
 async function submit (values, dispatch, ownProps) {
   if (values.nim === '') delete values.nim;
   if (values.tpb_nim === '') delete values.tpb_nim;
-  let response = await dispatch(updateStudent(ownProps.readOnlyValues.id, values));
+  let response = await dispatch(createStudent(values));
   if (response.error) {
     if (response.payload && response.payload.status === 422) {
       throw new SubmissionError({_error: 'Terdapat input yang tidak valid'});
@@ -103,4 +98,4 @@ const schema = {
   }
 };
 
-export default reduxForm({form: EDIT_STUDENT_FORM, validate: createValidator(schema)})(EditStudent);
+export default reduxForm({form: CREATE_STUDENT_FORM, validate: createValidator(schema)})(CreateStudent);

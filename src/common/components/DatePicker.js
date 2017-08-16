@@ -2,7 +2,7 @@ import React from 'react';
 import DatePicker from 'react-datetime';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {Table} from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
 class renderDatePicker extends React.Component {
   static propTypes = {
@@ -16,17 +16,17 @@ class renderDatePicker extends React.Component {
     this.props.timeFormat ? this.props.onChange(moment(date).format()) : this.props.onChange(moment(date).format('YYYY-MM-DD'));
   }
 
-   renderDay = ( props, currentDate, selectedDate ) => {
-        return <Table.Cell {...props}>{ parseInt(currentDate.date(), 10) < 10 ? '0' + currentDate.date() : currentDate.date()}</Table.Cell>;
-    }
+  renderDay = (props, currentDate, selectedDate) => {
+    return <Table.Cell {...props}>{ parseInt(currentDate.date(), 10) < 10 ? '0' + currentDate.date() : currentDate.date()}</Table.Cell>;
+  }
 
-    renderMonth = ( props, month, year, selectedDate ) => {
-        return <Table.Cell {...props}>{ month }</Table.Cell>;
-    }
+  renderMonth = (props, month, year, selectedDate) => {
+    return <Table.Cell {...props}>{ month }</Table.Cell>;
+  }
 
-    renderYear = ( props, year, selectedDate ) => {
-        return <Table.Cell {...props}>{ year % 100 }</Table.Cell>;
-    }
+  renderYear = (props, year, selectedDate) => {
+    return <Table.Cell {...props}>{ year % 100 }</Table.Cell>;
+  }
 
   render () {
     const {
@@ -36,7 +36,7 @@ class renderDatePicker extends React.Component {
       timeFormat,
       ...restOfProps
     } = this.props;
-    
+
     return (
       <Table color='teal' compact striped collapsing stackable size='small' textAlign='center'>
         <DatePicker

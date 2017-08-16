@@ -11,12 +11,12 @@ export const userStatuses = [
   { key: 'disabled', value: 'disabled', text: 'Tidak aktif' }
 ];
 
-export const genderEnum = [
+export const genders = [
   { key: 'male', value: 'male', text: 'Laki-laki' },
   { key: 'female', value: 'female', text: 'Perempuan' }
 ];
 
-export const departmentInItb = [
+export const departments = [
   { key: 'FITB', value: 'FITB', text: 'Fakultas Ilmu Teknologi Kebumian' },
   { key: 'FMIPA', value: 'FMIPA', text: 'Fakultas Matematika dan Ilmu Pengetahuan Alam' },
   { key: 'FSRD', value: 'FSRD', text: 'Fakultas Seni Rupa dan Desain' },

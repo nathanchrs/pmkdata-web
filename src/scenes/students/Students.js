@@ -3,118 +3,182 @@ import { connect } from 'react-redux';
 import AppLayout from '../../common/components/AppLayout';
 import PageMenu from '../../common/components/Pagination/PageMenu';
 import { fetchStudents, deleteStudent } from '../../services/students/actions';
-import { Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
-import EditStudent, { EDIT_STUDENT_FORM } from './EditStudent';
+import { Input, Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
+import EditStudent, { EDIT_STUDENT_FORM } from './EditStudent'
+import CreateStudent, { CREATE_STUDENT_FORM } from './CreateStudent'
 import { initialize } from 'redux-form';
-import moment from 'moment';
+import { enumText, studentStatuses, studentRoles } from '../../common/enums';
+import { getFirstSortDirection } from '../../common/utils';
 
 class Students extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
-    this.state = { editing: false, editingStudent: null, warningOpen: false };
+    this.state = {search: '', creatingStudent: false, editingStudent: null, deleteConfirmStudent: null};
   }
 
-  handleWarningOpen = (e) => this.setState({
-    warningOpen: true,
-  })
-
-  handleWarningClose = (e) => this.setState({
-    warningOpen: false,
-  })
-
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchStudentsDispatcher(this.props.students);
-  }
-
-  handleEditStart = (event, { id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church, parent_phone, bandung_address, hometown_address }) => {
-    this.props.initEditStudentFormDispatcher({ id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church, parent_phone, bandung_address, hometown_address });
-    this.setState({ editing: true, editingStudent: { id, tpb_nim, nim, year, department, name, gender, birth_date, phone, line, high_school, church, parent_phone, bandung_address, hometown_address } });
   };
 
-  handleEditDone = () => {
-    this.setState({ editing: false, editingStudent: null });
+  handleSearchChange = (event) => {
+    this.setState({search: event.target.value});
   };
 
-  handleDelete = (event, id) => {
-    this.props.deleteStudentDispatcher(id);
-    this.handleWarningClose(event);
-  }
+  handleSearch = () => {
+    this.props.fetchStudentsDispatcher(Object.assign(this.props.students, {search: this.state.search}));
+  };
 
-  render() {
-    const { students, isSupervisor, fetchStudentsDispatcher } = this.props;
+  handleSort = (field) => {
+    let sort = [{
+      field,
+      direction: getFirstSortDirection(this.props.students && this.props.students.sort, field) === 'ascending' ? 'descending' : 'ascending'
+    }];
+    this.props.fetchStudentsDispatcher(Object.assign(this.props.students, {sort}));
+  };
+
+  handleCreateStart = () => {
+    this.props.initCreateStudentFormDispatcher();
+    this.setState({creatingStudent: true});
+  };
+
+  handleEditStart = ({id, ...rest}) => {
+    this.props.initEditStudentFormDispatcher(rest);
+    this.setState({editingStudent: {id, ...rest}});
+  };
+
+  render () {
+    const {students, fetchStudentsDispatcher, deleteStudentDispatcher} = this.props;
     return (
       <AppLayout section='students'>
-        <Header>Anggota</Header>
+        <div style={{display: 'flex'}}>
+          <div>
+            <Header style={{margin: '5px 0'}}>
+              Data Anggota
+              {students.search &&
+              <small>{' - hasil pencarian untuk \'' + students.search + '\''}</small>
+              }
+            </Header>
+          </div>
 
-        <Table collapsing compact selectable attached={students.error ? 'top' : null}>
+          <div style={{marginLeft: 'auto'}}>
+            <Input type='text' placeholder='Cari...' style={{marginRight: '10px'}}
+                   value={this.state.search} onChange={this.handleSearchChange}
+                   action={<Button icon='search' onClick={this.handleSearch}/>}
+            />
+            <Button primary icon='add' onClick={this.handleCreateStart}/>
+          </div>
+        </div>
+
+        <Table compact sortable unstackable attached={students.error ? 'top' : null}>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>id</Table.HeaderCell>
-              <Table.HeaderCell>NIM TPB</Table.HeaderCell>
-              <Table.HeaderCell>NIM</Table.HeaderCell>
-              <Table.HeaderCell>Tahun Angkatan</Table.HeaderCell>
-              <Table.HeaderCell>Fakultas</Table.HeaderCell>
-              <Table.HeaderCell>Nama</Table.HeaderCell>
-              <Table.HeaderCell>Jenis kelamin</Table.HeaderCell>
-              <Table.HeaderCell>Tanggal Lahir</Table.HeaderCell>
-              <Table.HeaderCell>No. HP</Table.HeaderCell>
-              <Table.HeaderCell>No. HP Orang Tua</Table.HeaderCell>
-              <Table.HeaderCell>Line</Table.HeaderCell>
-              <Table.HeaderCell>Asal Sekolah</Table.HeaderCell>
-              <Table.HeaderCell>Gereja</Table.HeaderCell>
-              <Table.HeaderCell>Alamat Bandung</Table.HeaderCell>
-              <Table.HeaderCell>Alamat Asal</Table.HeaderCell>
-              <Table.HeaderCell>Action</Table.HeaderCell>
+              <Table.HeaderCell collapsing />
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'id')}
+                                onClick={() => this.handleSort('id')}>ID</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'name')}
+                                onClick={() => this.handleSort('name')}>Nama</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'year')}
+                                onClick={() => this.handleSort('year')}>Angkatan</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'department')}
+                                onClick={() => this.handleSort('department')}>Fakultas/Prodi</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'tpb_nim')}
+                                onClick={() => this.handleSort('tpb_nim')}>NIM TPB</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'nim')}
+                                onClick={() => this.handleSort('nim')}>NIM</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'gender')}
+                                onClick={() => this.handleSort('gender')}>Jenis kelamin</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'birth_date')}
+                                onClick={() => this.handleSort('birth_date')}>Tanggal lahir</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'phone')}
+                                onClick={() => this.handleSort('phone')}>Telepon</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'parent_phone')}
+                                onClick={() => this.handleSort('parent_phone')}>Telepon orangtua</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'line')}
+                                onClick={() => this.handleSort('line')}>LINE</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'current_address')}
+                                onClick={() => this.handleSort('current_address')}>Alamat tinggal</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'hometown_address')}
+                                onClick={() => this.handleSort('hometown_address')}>Alamat asal</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'high_school')}
+                                onClick={() => this.handleSort('high_school')}>Asal sekolah</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'church')}
+                                onClick={() => this.handleSort('church')}>Gereja</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'created_at')}
+                                onClick={() => this.handleSort('created_at')}>Dibuat pada</Table.HeaderCell>
+              <Table.HeaderCell sorted={getFirstSortDirection(students.sort, 'updated_at')}
+                                onClick={() => this.handleSort('updated_at')}>Diubah pada</Table.HeaderCell>
+
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
             {students.data ? students.data.map((student) => (
-              <Table.Row verticalAlign='top' key={student.id}>
+              <Table.Row key={student.id}>
+                <Table.Cell collapsing>
+                  <Button size='mini' circular content='Edit' icon="edit"
+                          onClick={() => this.handleEditStart(student)}/>
+                  <Button size='mini' circular icon="trash" basic negative
+                          onClick={() => this.setState({deleteConfirmStudent: student})}/>
+                </Table.Cell>
+
                 <Table.Cell>{student.id}</Table.Cell>
-                <Table.Cell>{student.tpb_nim}</Table.Cell>
-                <Table.Cell>{student.nim}</Table.Cell>
+                <Table.Cell>{student.name}</Table.Cell>
                 <Table.Cell>{student.year}</Table.Cell>
                 <Table.Cell>{student.department}</Table.Cell>
-                <Table.Cell>{student.name}</Table.Cell>
+                <Table.Cell>{student.tpb_nim}</Table.Cell>
+                <Table.Cell>{student.nim}</Table.Cell>
                 <Table.Cell>{student.gender}</Table.Cell>
-                <Table.Cell>{moment(student.birth_date).format('DD-MM-YYYY')}</Table.Cell>
+                <Table.Cell>{student.birth_date}</Table.Cell>
                 <Table.Cell>{student.phone}</Table.Cell>
                 <Table.Cell>{student.parent_phone}</Table.Cell>
                 <Table.Cell>{student.line}</Table.Cell>
+                <Table.Cell>{student.current_address}</Table.Cell>
+                <Table.Cell>{student.hometown_address}</Table.Cell>
                 <Table.Cell>{student.high_school}</Table.Cell>
                 <Table.Cell>{student.church}</Table.Cell>
-                <Table.Cell>{student.bandung_address}</Table.Cell>
-                <Table.Cell>{student.hometown_address}</Table.Cell>
-                <Table.Cell>
-                  <Button icon="edit" onClick={(e) => this.handleEditStart(e, student)} />
-                  <Button icon="delete" negative onClick={this.handleWarningOpen} />
-                </Table.Cell>
-                <Confirm
-                  open={this.state.warningOpen}
-                  content='This action cannot be undone!'
-                  onCancel={this.handleWarningClose}
-                  onConfirm={(e) => this.handleDelete(e, student.id)}
-                />
+                <Table.Cell>{student.created_at}</Table.Cell>
+                <Table.Cell>{student.updated_at}</Table.Cell>
               </Table.Row>
             )) :
               <Table.Row>
-                <Table.Cell colSpan='5'><i>Tidak ada data yang sesuai.</i></Table.Cell>
+                <Table.Cell colSpan='7'><i>Tidak ada data yang sesuai.</i></Table.Cell>
               </Table.Row>
             }
           </Table.Body>
         </Table>
 
         {students.error &&
-          <Message error attached='bottom'>
-            <Icon name='warning sign'/> {students.error}
-          </Message>
+        <Message error attached='bottom'>
+          <Icon name='warning sign'/> {students.error}
+        </Message>
         }
 
-        <PageMenu floated='right' size='mini' storeKey='students' onPageChange={fetchStudentsDispatcher} />
+        <PageMenu floated='right' size='mini' storeKey='students' onPageChange={fetchStudentsDispatcher}/>
 
-        <Dimmer inverted active={students.isFetching}><Loader size='big' /></Dimmer>
-        <EditStudent open={this.state.editing} readOnlyValues={this.state.editingStudent || {}} onClose={this.handleEditDone} />
+        <Dimmer inverted active={students.isFetching}><Loader size='big'/></Dimmer>
+
+        <Confirm
+          open={!!this.state.deleteConfirmStudent}
+          content={'Yakin ingin menghapus data anggota '
+          + (this.state.deleteConfirmStudent && this.state.deleteConfirmStudent.id) + '?'}
+          confirmButton='Hapus'
+          cancelButton='Batal'
+          onCancel={() => this.setState({deleteConfirmStudent: null})}
+          onConfirm={() => {
+            deleteStudentDispatcher(this.state.deleteConfirmStudent && this.state.deleteConfirmStudent.id);
+            this.setState({deleteConfirmStudent: null})
+          }
+          }
+        />
+
+        <CreateStudent open={this.state.creatingStudent}
+                    onClose={() => this.setState({creatingStudent: false})}
+        />
+
+        <EditStudent open={!!this.state.editingStudent}
+                  readOnlyValues={this.state.editingStudent || {}}
+                  onClose={() => this.setState({editingStudent: null})}
+        />
 
       </AppLayout>
     );
@@ -123,16 +187,16 @@ class Students extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    students: state.students,
-    isSupervisor: state.session.user && (state.session.user.role === 'supervisor' || state.session.user.role === 'admin')
+    students: state.students
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchStudentsDispatcher: (pageInfo) => dispatch(fetchStudents(pageInfo)),
+    initCreateStudentFormDispatcher: initialValues => dispatch(initialize(CREATE_STUDENT_FORM)),
     initEditStudentFormDispatcher: initialValues => dispatch(initialize(EDIT_STUDENT_FORM, initialValues)),
-    deleteStudentDispatcher: (idStudents) => dispatch(deleteStudent(idStudents))
+    deleteStudentDispatcher: (id) => dispatch(deleteStudent(id)),
   };
 };
 

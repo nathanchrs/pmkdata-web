@@ -19,6 +19,10 @@ const schemas = {
     return schema;
   },
 
+  text: {
+    'type': 'string'
+  },
+
   department: {
     'type': 'string',
     'enum': ['FITB', 'FMIPA', 'FSRD', 'FTI', 'FTMD', 'FTTM', 'FTSL', 'SAPPK', 'SBM', 'SF', 'SITH', 'STEI'],
