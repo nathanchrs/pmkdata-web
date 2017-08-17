@@ -26,13 +26,6 @@ export const SEARCH_USER_REQUEST = 'SEARCH_USER_REQUEST';
 export const SEARCH_USER_SUCCESS = 'SEARCH_USER_SUCCESS';
 export const SEARCH_USER_FAILURE = 'SEARCH_USER_FAILURE';
 
-export const FETCH_USER_MENTEES_REQUEST = 'FETCH_USER_MENTEES_REQUEST';
-export const FETCH_USER_MENTEES_SUCCESS = 'FETCH_USER_MENTEES_SUCCESS';
-export const FETCH_USER_MENTEES_FAILURE = 'FETCH_USER_MENTEES_FAILURE';
-
-export const SEARCH_USER_MENTEES_REQUEST = 'SEARCH_USER_MENTEES_REQUEST';
-export const SEARCH_USER_MENTEES_SUCCESS = 'SEARCH_USER_MENTEES_SUCCESS';
-export const SEARCH_USER_MENTEES_FAILURE = 'SEARCH_USER_MENTEES_FAILURE';
 
 export function register (body) {
   return (dispatch, getState) => {
@@ -95,22 +88,5 @@ export function searchUsers (search) {
     method: 'GET',
     query: {search},
     types: [SEARCH_USER_REQUEST, SEARCH_USER_SUCCESS, SEARCH_USER_FAILURE]
-  });
-}
-
-export function searchUserMentees (userId, search) {
-  return createApiAction({
-    endpoint: '/api/users/' + (+userId) + '/mentees/search',
-    method: 'GET',
-    query: {search},
-    types: [SEARCH_USER_MENTEES_REQUEST, SEARCH_USER_MENTEES_SUCCESS, SEARCH_USER_MENTEES_FAILURE]
-  });
-}
-
-export function fetchUserMentees (userId) {
-  return createApiAction({
-    endpoint: '/api/users/' + (+userId) + '/mentees',
-    method: 'GET',
-    types: [FETCH_USER_MENTEES_REQUEST, FETCH_USER_MENTEES_SUCCESS, FETCH_USER_MENTEES_FAILURE]
   });
 }

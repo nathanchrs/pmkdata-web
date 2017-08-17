@@ -4,6 +4,7 @@ import sessionReducer from './session/reducer';
 import usersReducer from './users/reducer';
 import studentsReducer from './students/reducer';
 import interactionsReducer from './interactions/reducer';
+import menteesReducer from './mentees/reducer';
 
 export const RESET_REDUX_STATE = 'RESET_REDUX_STATE';
 
@@ -12,7 +13,8 @@ const appReducer = combineReducers({
   session: sessionReducer,
   users: usersReducer,
   students: studentsReducer,
-  interactions: interactionsReducer
+  interactions: interactionsReducer,
+  mentees: menteesReducer
 });
 
 const rootReducer = (state, action) => {

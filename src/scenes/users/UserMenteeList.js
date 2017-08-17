@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Dimmer, Loader, Search, Divider, List } from 'semantic-ui-react';
 import { addMentee, removeMentee } from '../../services/mentees/actions';
 import { searchStudents } from '../../services/students/actions';
-import { fetchUserMentees } from '../../services/users/actions';
+import { fetchUserMentees } from '../../services/mentees/actions';
 import { connect } from 'react-redux';
 
 class UserMenteeList extends React.Component {

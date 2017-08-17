@@ -3,7 +3,7 @@ import { Button, Dimmer, Loader, Search, Divider, List } from 'semantic-ui-react
 import { fetchInteractionParticipants, addInteractionParticipant, removeInteractionParticipant }
   from '../../services/interactions/actions';
 import { searchStudents } from '../../services/students/actions';
-import { searchUserMentees } from '../../services/users/actions';
+import { searchUserMentees } from '../../services/mentees/actions';
 import { connect } from 'react-redux';
 
 class ParticipantList extends React.Component {
@@ -35,7 +35,8 @@ class ParticipantList extends React.Component {
     this.setState({searchLoading: true, searchValue: value});
     if (value.length < 1) return this.resetComponent();
 
-    let results = await this.props.searchUserMenteesDispatcher(this.props.user.id, value);
+    //let results = await this.props.searchUserMenteesDispatcher(this.props.user.id, value);
+    let results = await this.props.searchStudentsDispatcher(value);
     results = results.map(({id, name, department, year}) => ({id, title: name, description: year + ' | ' + department}));
     this.setState({searchLoading: false, searchResults: results});
   };

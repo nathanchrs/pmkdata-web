@@ -18,12 +18,15 @@ class AppLayout extends React.Component {
           <Menu.Item active={section === 'interactions'} name='interactions' link as={Link} to='/interactions'>
             <Icon name='file text' />Laporan
           </Menu.Item>
+          <Menu.Item active={section === 'mentees'} name='mentees' link as={Link} to='/mentees'>
+            <Icon name='users' />Mentee
+          </Menu.Item>
 
           {isSupervisor && (
             <div>
               <Divider />
               <Menu.Item active={section === 'students'} name='students' link as={Link} to='/students'>
-                <Icon name='users' />Data Anggota
+                <Icon name='student' />Data Anggota
               </Menu.Item>
               <Menu.Item active={section === 'users'} name='users' link as={Link} to='/users'>
                 <Icon name='address book outline' />Akun

@@ -7,6 +7,7 @@ import Register from './scenes/users/Register';
 import Users from './scenes/users/Users';
 import Students from './scenes/students/Students';
 import Interactions from './scenes/interactions/Interactions';
+import Mentees from './scenes/mentees/Mentees';
 import './App.css';
 import 'moment/locale/id';
 
@@ -19,6 +20,7 @@ class App extends React.Component {
         <div style={{ height: '100%' }}>
           <ProtectedRoute exact path='/' component={ () => <Redirect to='/interactions'/>} />
           <ProtectedRoute path='/interactions' component={Interactions} />
+          <ProtectedRoute path='/mentees' component={Mentees} />
           <ProtectedRoute path='/students' component={Students} />
           <ProtectedRoute path='/users' component={Users} />
 
