@@ -1,13 +1,10 @@
 
 const schemas = {
 
-  number: (min, max) => {
-    let schema = {
-      'type': 'integer'
-    };
-    if (min) schema.minimum = min;
-    if (max) schema.maximum = max;
-    return schema;
+  auto_id: {
+    'type': 'integer',
+    'minimum': 0,
+    'errorMessage': 'Pilihan harus memiliki ID yang valid'
   },
 
   varchar: (length) => {
@@ -15,29 +12,40 @@ const schemas = {
       'type': 'string'
     };
 
-    if (length) schema.maxLength = length;
+    if (length) {
+      schema.maxLength = length;
+      schema.errorMessage = 'Panjang input maksimal ' + length.toString() + ' karakter';
+    }
     return schema;
+  },
+
+  text: {
+    'type': 'string'
   },
 
   department: {
     'type': 'string',
-    'enum': ['FITB', 'FMIPA', 'FSRD', 'FTI', 'FTMD', 'FTTM', 'FTSL', 'SAPPK', 'SBM', 'SF', 'SITH', 'STEI']
+    'enum': ['FITB', 'FMIPA', 'FSRD', 'FTI', 'FTMD', 'FTTM', 'FTSL', 'SAPPK', 'SBM', 'SF', 'SITH', 'STEI'],
+    'errorMessage': 'Fakultas tidak valid'
   },
 
   datetime: {
     'type': 'string',
-    'format': 'date-time'
+    'format': 'date-time',
+    'errorMessage': 'Tanggal dan/atau waktu tidak valid'
   },
 
   date: {
     'type': 'string',
-    'format': 'date'
+    'format': 'date',
+    'errorMessage': 'Tanggal tidak valid'
   },
 
   year: {
     'type': 'integer',
     'minimum': 1990,
-    'maximum': 2089
+    'maximum': 2089,
+    'errorMessage': 'Tahun tidak valid'
   },
 
   gender: {
@@ -47,13 +55,15 @@ const schemas = {
 
   phone: {
     'type': 'string',
-    'maxLength': 16
+    'maxLength': 16,
+    'errorMessage': 'Nomor telepon tidak valid'
   },
 
   line: {
     'type': 'string',
     'maxLength': 32,
-    'pattern': '^[a-zA-Z0-9@_]+$'
+    'pattern': '^[a-zA-Z0-9@_]+$',
+    'errorMessage': 'Username LINE hanya boleh mengandung karakter alfanumerik, @ dan underscore (_)'
   },
 
   nim: {

@@ -1,32 +1,54 @@
 import React from 'react';
 import { Field } from 'redux-form';
-import { Form, Input } from 'semantic-ui-react';
-import DatePicker from './DatePicker';
+import { Form, Input, TextArea } from 'semantic-ui-react';
+import Datetime from 'react-datetime';
+import moment from 'moment';
+import { displayDateFormat, displayTimeFormat, storeDateFormat, storeDateTimeFormat } from '../constants';
 
 class ControlledField extends React.Component {
   innerComponent = innerProps => {
-    const { input, meta, ...innerPropsRest } = innerProps;
-    const onChange = this.props.component === DatePicker ? (data) => input.onChange(data) : (event, data) => input.onChange(data.value);
-    const actualComponentProps = {
+    const {input, meta, ...innerPropsRest} = innerProps;
+    let {value, inputRest} = input;
+    let actualComponentProps = {
       ...innerPropsRest,
-      ...input,
-      onChange,
+      value,
+      ...inputRest,
+      onChange: (event, data) => input.onChange(data.value),
       error: meta.touched && meta.invalid,
       loading: meta.asyncValidating
     };
+
+    if (this.props.component === Datetime) {
+      actualComponentProps.value = moment(value);
+      actualComponentProps.dateFormat = displayDateFormat;
+      if (innerPropsRest.dateOnly) {
+        actualComponentProps.timeFormat = false;
+        actualComponentProps.onChange = (data) => input.onChange(moment(data).format(storeDateFormat));
+      } else {
+        actualComponentProps.timeFormat = displayTimeFormat;
+        actualComponentProps.onChange = (data) => input.onChange(moment(data).format(storeDateTimeFormat));
+      }
+    }
+
+    const error = actualComponentProps.error;
+    if (this.props.component === TextArea) {
+      delete actualComponentProps.error;
+      delete actualComponentProps.loading;
+    }
+
     return (
-      <Form.Field style={{ marginBottom: '14px' }}>
+      <Form.Field style={{marginBottom: '14px'}}>
         <label>{this.props.label}</label>
         {React.createElement(this.props.component, actualComponentProps)}
-        {actualComponentProps.error &&
-          <div style={{ fontSize: '0.8rem', color: '#9f3a38' }}>{meta.error}</div>
+        {error &&
+        <div style={{fontSize: '0.8rem', color: '#9f3a38'}}>{meta.error}</div>
         }
       </Form.Field>
     );
   };
 
-  render() {
-    const { component, label, ...rest } = this.props;
+  render () {
+    const {component, label, ...rest} = this.props;
     return <Field component={this.innerComponent} {...rest} />;
   }
 }

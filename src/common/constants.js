@@ -11,12 +11,12 @@ export const userStatuses = [
   { key: 'disabled', value: 'disabled', text: 'Tidak aktif' }
 ];
 
-export const genderEnum = [
+export const genders = [
   { key: 'male', value: 'male', text: 'Laki-laki' },
   { key: 'female', value: 'female', text: 'Perempuan' }
 ];
 
-export const departmentInItb = [
+export const departments = [
   { key: 'FITB', value: 'FITB', text: 'Fakultas Ilmu Teknologi Kebumian' },
   { key: 'FMIPA', value: 'FMIPA', text: 'Fakultas Matematika dan Ilmu Pengetahuan Alam' },
   { key: 'FSRD', value: 'FSRD', text: 'Fakultas Seni Rupa dan Desain' },
@@ -27,11 +27,16 @@ export const departmentInItb = [
   { key: 'SAPPK', value: 'SAPPK', text: 'Sekolah Arsitektur, Perencanaan dan Pengembangan Kebijakan' },
   { key: 'SBM', value: 'SBM', text: 'Sekolah Bisnis dan Manajemen' },
   { key: 'SF', value: 'SF', text: 'Sekolah Farmasi' },
-  { key: 'SITH-S', value: 'SITH-S', text: 'Sekolah Ilmu dan Teknologi Hayati - Program Sains' },
-  { key: 'SITH-R', value: 'SITH-R', text: 'Fakultas Ilmu Teknologi Kebumian - Program Rekayasa' },
+  { key: 'SITH', value: 'SITH', text: 'Sekolah Ilmu dan Teknologi Hayati' },
   { key: 'STEI', value: 'STEI', text: 'Sekolah Teknik Elektro dan Informatika' }
 ];
 
 export function enumText (enums, value) {
   return enums.find(item => item.value === value).text;
 }
+
+export const displayDateFormat = 'D MMMM YYYY';
+export const displayTimeFormat = 'HH:mm';
+export const displayDateTimeFormat = displayDateFormat + ' ' + displayTimeFormat;
+export const storeDateFormat = 'YYYY-MM-DD';
+export const storeDateTimeFormat = 'YYYY-MM-DDTHH:mm:ssZ';
