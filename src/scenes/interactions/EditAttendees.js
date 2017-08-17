@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Tab } from 'semantic-ui-react';
 import MentorList from './MentorList';
+import ParticipantList from './ParticipantList';
 
 
 class EditAttendees extends React.Component {
@@ -14,7 +15,7 @@ class EditAttendees extends React.Component {
             <MentorList interaction={interaction}/>
           </Tab.Pane>},
           {menuItem: 'Mentee', render: () => <Tab.Pane>
-            <MentorList interaction={interaction}/>
+            <ParticipantList interaction={interaction}/>
           </Tab.Pane>}
         ]}/>
       </Modal>
