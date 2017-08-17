@@ -18,6 +18,10 @@ export const DELETE_STUDENT_REQUEST = 'DELETE_STUDENT_REQUEST';
 export const DELETE_STUDENT_SUCCESS = 'DELETE_STUDENT_SUCCESS';
 export const DELETE_STUDENT_FAILURE = 'DELETE_STUDENT_FAILURE';
 
+export const SEARCH_STUDENTS_REQUEST = 'SEARCH_STUDENTS_REQUEST';
+export const SEARCH_STUDENTS_SUCCESS = 'SEARCH_STUDENTS_SUCCESS';
+export const SEARCH_STUDENTS_FAILURE = 'SEARCH_STUDENTS_FAILURE';
+
 export function fetchStudents ({page, perPage, search, sort, filters} = {}) {
   return createApiAction({
     endpoint: '/api/students',
@@ -48,10 +52,19 @@ export function updateStudent (id, body) {
   });
 }
 
-export function deleteStudent (id, body) {
+export function deleteStudent (id) {
   return createApiAction({
     endpoint: '/api/students/' + id,
     method: 'DELETE',
     types: [DELETE_STUDENT_REQUEST, {type: DELETE_STUDENT_SUCCESS, meta: {deleteKey: id}}, DELETE_STUDENT_FAILURE]
+  });
+}
+
+export function searchStudents (search) {
+  return createApiAction({
+    endpoint: '/api/students/search',
+    method: 'GET',
+    query: {search},
+    types: [SEARCH_STUDENTS_REQUEST, SEARCH_STUDENTS_SUCCESS, SEARCH_STUDENTS_FAILURE]
   });
 }

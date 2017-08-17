@@ -29,6 +29,10 @@ body {
   border-color: #e0b4b4;
 }
 
+.ui.search.fluid .ui.input {
+  width: 100%;
+}
+
 .field textarea {
   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
   line-height: 1.21428571em;

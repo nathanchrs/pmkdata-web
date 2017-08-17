@@ -18,6 +18,30 @@ export const DELETE_INTERACTION_REQUEST = 'DELETE_INTERACTION_REQUEST';
 export const DELETE_INTERACTION_SUCCESS = 'DELETE_INTERACTION_SUCCESS';
 export const DELETE_INTERACTION_FAILURE = 'DELETE_INTERACTION_FAILURE';
 
+export const FETCH_INTERACTION_MENTORS_REQUEST = 'FETCH_INTERACTION_MENTORS_REQUEST';
+export const FETCH_INTERACTION_MENTORS_SUCCESS = 'FETCH_INTERACTION_MENTORS_SUCCESS';
+export const FETCH_INTERACTION_MENTORS_FAILURE = 'FETCH_INTERACTION_MENTORS_FAILURE';
+
+export const FETCH_INTERACTION_PARTICIPANTS_REQUEST = 'FETCH_INTERACTION_PARTICIPANTS_REQUEST';
+export const FETCH_INTERACTION_PARTICIPANTS_SUCCESS = 'FETCH_INTERACTION_PARTICIPANTS_SUCCESS';
+export const FETCH_INTERACTION_PARTICIPANTS_FAILURE = 'FETCH_INTERACTION_PARTICIPANTS_FAILURE';
+
+export const ADD_INTERACTION_MENTOR_REQUEST = 'ADD_INTERACTION_MENTOR_REQUEST';
+export const ADD_INTERACTION_MENTOR_SUCCESS = 'ADD_INTERACTION_MENTOR_SUCCESS';
+export const ADD_INTERACTION_MENTOR_FAILURE = 'ADD_INTERACTION_MENTOR_FAILURE';
+
+export const ADD_INTERACTION_PARTICIPANT_REQUEST = 'ADD_INTERACTION_PARTICIPANT_REQUEST';
+export const ADD_INTERACTION_PARTICIPANT_SUCCESS = 'ADD_INTERACTION_PARTICIPANT_SUCCESS';
+export const ADD_INTERACTION_PARTICIPANT_FAILURE = 'ADD_INTERACTION_PARTICIPANT_FAILURE';
+
+export const REMOVE_INTERACTION_MENTOR_REQUEST = 'REMOVE_INTERACTION_MENTOR_REQUEST';
+export const REMOVE_INTERACTION_MENTOR_SUCCESS = 'REMOVE_INTERACTION_MENTOR_SUCCESS';
+export const REMOVE_INTERACTION_MENTOR_FAILURE = 'REMOVE_INTERACTION_MENTOR_FAILURE';
+
+export const REMOVE_INTERACTION_PARTICIPANT_REQUEST = 'REMOVE_INTERACTION_PARTICIPANT_REQUEST';
+export const REMOVE_INTERACTION_PARTICIPANT_SUCCESS = 'REMOVE_INTERACTION_PARTICIPANT_SUCCESS';
+export const REMOVE_INTERACTION_PARTICIPANT_FAILURE = 'REMOVE_INTERACTION_PARTICIPANT_FAILURE';
+
 export function fetchInteractions ({page, perPage, search, sort, filters} = {}) {
   return createApiAction({
     endpoint: '/api/interactions',
@@ -53,5 +77,55 @@ export function deleteInteraction (id, body) {
     endpoint: '/api/interactions/' + id,
     method: 'DELETE',
     types: [DELETE_INTERACTION_REQUEST, {type: DELETE_INTERACTION_SUCCESS, meta: {deleteKey: id}}, DELETE_INTERACTION_FAILURE]
+  });
+}
+
+export function fetchInteractionMentors (interactionId) {
+  return createApiAction({
+    endpoint: '/api/interactions/' + (+interactionId) + '/mentors',
+    method: 'GET',
+    types: [FETCH_INTERACTION_MENTORS_REQUEST, FETCH_INTERACTION_MENTORS_SUCCESS, FETCH_INTERACTION_MENTORS_FAILURE]
+  });
+}
+
+export function fetchInteractionParticipants (interactionId) {
+  return createApiAction({
+    endpoint: '/api/interactions/' + (+interactionId) + '/participants',
+    method: 'GET',
+    types: [FETCH_INTERACTION_PARTICIPANTS_REQUEST, FETCH_INTERACTION_PARTICIPANTS_SUCCESS, FETCH_INTERACTION_PARTICIPANTS_FAILURE]
+  });
+}
+
+export function addInteractionMentor (interactionId, userId) {
+  return createApiAction({
+    endpoint: '/api/interactions/' + (+interactionId) + '/mentors',
+    body: {user_id: +userId},
+    method: 'POST',
+    types: [ADD_INTERACTION_MENTOR_REQUEST, ADD_INTERACTION_MENTOR_SUCCESS, ADD_INTERACTION_MENTOR_FAILURE]
+  });
+}
+
+export function addInteractionParticipant (interactionId, studentId) {
+  return createApiAction({
+    endpoint: '/api/interactions/' + (+interactionId) + '/participants',
+    body: {student_id: +studentId},
+    method: 'POST',
+    types: [ADD_INTERACTION_PARTICIPANT_REQUEST, ADD_INTERACTION_MENTOR_SUCCESS, ADD_INTERACTION_PARTICIPANT_FAILURE]
+  });
+}
+
+export function removeInteractionMentor (interactionId, userId) {
+  return createApiAction({
+    endpoint: '/api/interactions/' + (+interactionId) + '/mentors/' + (+userId),
+    method: 'DELETE',
+    types: [REMOVE_INTERACTION_MENTOR_REQUEST, REMOVE_INTERACTION_MENTOR_SUCCESS, REMOVE_INTERACTION_MENTOR_FAILURE]
+  });
+}
+
+export function removeInteractionParticipant (interactionId, studentId) {
+  return createApiAction({
+    endpoint: '/api/interactions/' + (+interactionId) + '/participants/' + (+studentId),
+    method: 'DELETE',
+    types: [REMOVE_INTERACTION_PARTICIPANT_REQUEST, REMOVE_INTERACTION_PARTICIPANT_SUCCESS, REMOVE_INTERACTION_PARTICIPANT_FAILURE]
   });
 }

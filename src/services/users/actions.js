@@ -22,6 +22,10 @@ export const DELETE_USER_REQUEST = 'DELETE_USER_REQUEST';
 export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
 export const DELETE_USER_FAILURE = 'DELETE_USER_FAILURE';
 
+export const SEARCH_USER_REQUEST = 'SEARCH_USER_REQUEST';
+export const SEARCH_USER_SUCCESS = 'SEARCH_USER_SUCCESS';
+export const SEARCH_USER_FAILURE = 'SEARCH_USER_FAILURE';
+
 export function register (body) {
   return (dispatch, getState) => {
     if (getState().session.user) {
@@ -74,5 +78,14 @@ export function deleteUser (username) {
     endpoint: '/api/users/' + username,
     method: 'DELETE',
     types: [DELETE_USER_REQUEST, {type: DELETE_USER_SUCCESS, meta: {deleteKey: username}}, DELETE_USER_FAILURE]
+  });
+}
+
+export function searchUsers (search) {
+  return createApiAction({
+    endpoint: '/api/users/search',
+    method: 'GET',
+    query: {search},
+    types: [SEARCH_USER_REQUEST, SEARCH_USER_SUCCESS, SEARCH_USER_FAILURE]
   });
 }

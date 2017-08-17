@@ -6,6 +6,7 @@ import { fetchInteractions, deleteInteraction } from '../../services/interaction
 import { Input, Button, Dimmer, Header, Icon, Loader, Message, Table, Confirm } from 'semantic-ui-react';
 import EditInteraction, { EDIT_INTERACTION_FORM } from './EditInteraction'
 import CreateInteraction, { CREATE_INTERACTION_FORM } from './CreateInteraction'
+import EditAttendees from './EditAttendees';
 import { initialize } from 'redux-form';
 import { getFirstSortDirection } from '../../common/utils';
 import moment from 'moment';
@@ -14,7 +15,13 @@ import { displayDateTimeFormat } from '../../common/constants';
 class Interactions extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {search: '', creatingInteraction: false, editingInteraction: null, deleteConfirmInteraction: null};
+    this.state = {
+      search: '',
+      creatingInteraction: false,
+      editingInteraction: null,
+      editingAttendees: null,
+      deleteConfirmInteraction: null
+    };
   }
 
   componentDidMount () {
@@ -45,6 +52,10 @@ class Interactions extends React.Component {
   handleEditStart = ({id, ...rest}) => {
     this.props.initEditInteractionFormDispatcher(rest);
     this.setState({editingInteraction: {id, ...rest}});
+  };
+
+  handleEditAttendeesStart = (interaction) => {
+    this.setState({editingAttendees: interaction});
   };
 
   render () {
@@ -94,9 +105,11 @@ class Interactions extends React.Component {
             {interactions.data ? interactions.data.map((interaction) => (
               <Table.Row key={interaction.id}>
                 <Table.Cell collapsing>
-                  <Button size='mini' circular content='Edit' icon="edit"
+                  <Button size='mini' circular content='Edit' icon='edit'
                           onClick={() => this.handleEditStart(interaction)}/>
-                  <Button size='mini' circular icon="trash" basic negative
+                  <Button size='mini' circular content='Kehadiran' icon='users'
+                          onClick={() => this.handleEditAttendeesStart(interaction)}/>
+                  <Button size='mini' circular icon='trash' basic negative
                           onClick={() => this.setState({deleteConfirmInteraction: interaction})}/>
                 </Table.Cell>
 
@@ -146,6 +159,11 @@ class Interactions extends React.Component {
         <EditInteraction open={!!this.state.editingInteraction}
                          readOnlyValues={this.state.editingInteraction || {}}
                          onClose={() => this.setState({editingInteraction: null})}
+        />
+
+        <EditAttendees open={!!this.state.editingAttendees}
+                       interaction={this.state.editingAttendees || {}}
+                       onClose={() => this.setState({editingAttendees: null})}
         />
 
       </AppLayout>
