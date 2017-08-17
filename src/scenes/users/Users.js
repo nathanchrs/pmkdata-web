@@ -9,6 +9,7 @@ import CreateUser, { CREATE_USER_FORM } from './CreateUser'
 import { initialize } from 'redux-form';
 import { enumText, userStatuses, userRoles, displayDateTimeFormat } from '../../common/constants';
 import { getFirstSortDirection } from '../../common/utils';
+import EditUserPassword, { EDIT_USER_PASSWORD_FORM } from './EditUserPassword';
 import moment from 'moment';
 
 class Users extends React.Component {
@@ -47,8 +48,13 @@ class Users extends React.Component {
     this.setState({editingUser: {id, username, nim, email, role, status}});
   };
 
+  handleEditPasswordStart = (user) => {
+    this.props.initEditUserPasswordFormDispatcher({oldPassword: '', newPassword: '', confirmNewPassword: ''});
+    this.setState({editingUserPassword: user});
+  };
+
   render () {
-    const {users, fetchUsersDispatcher, deleteUserDispatcher, validateUserDispatcher} = this.props;
+    const {users, fetchUsersDispatcher, deleteUserDispatcher, validateUserDispatcher, isSupervisor} = this.props;
     return (
       <AppLayout section='users'>
         <div style={{display: 'flex'}}>
@@ -99,7 +105,9 @@ class Users extends React.Component {
                 <Table.Cell collapsing>
                   <Button size='mini' circular content='Edit' icon="edit"
                           onClick={() => this.handleEditStart(user)}/>
-                  <Button size='mini' circular icon="trash" basic negative
+                  <Button size='mini' circular icon='key' basic
+                          onClick={() => this.handleEditPasswordStart(user)}/>
+                  <Button size='mini' circular icon='trash' basic negative
                           onClick={() => this.setState({deleteConfirmUser: user})}/>
                 </Table.Cell>
                 <Table.Cell>{user.username}</Table.Cell>
@@ -158,6 +166,12 @@ class Users extends React.Component {
                   onClose={() => this.setState({editingUser: null})}
         />
 
+        <EditUserPassword open={!!this.state.editingUserPassword}
+                          isSupervisor={isSupervisor}
+                          readOnlyValues={this.state.editingUserPassword || {}}
+                          onClose={() => this.setState({editingUserPassword: null})}
+        />
+
       </AppLayout>
     );
   }
@@ -165,7 +179,8 @@ class Users extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    users: state.users
+    users: state.users,
+    isSupervisor: state.session.user && (state.session.user.role === 'supervisor' || state.session.user.role === 'admin')
   };
 };
 
@@ -174,6 +189,7 @@ const mapDispatchToProps = dispatch => {
     fetchUsersDispatcher: (pageInfo) => dispatch(fetchUsers(pageInfo)),
     initCreateUserFormDispatcher: initialValues => dispatch(initialize(CREATE_USER_FORM)),
     initEditUserFormDispatcher: initialValues => dispatch(initialize(EDIT_USER_FORM, initialValues)),
+    initEditUserPasswordFormDispatcher: initialValues => dispatch(initialize(EDIT_USER_PASSWORD_FORM, initialValues)),
     deleteUserDispatcher: (username) => dispatch(deleteUser(username)),
     validateUserDispatcher: (username) => dispatch(updateUser(username, {status: 'active'}))
   };

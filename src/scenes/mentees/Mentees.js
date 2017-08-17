@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppLayout from '../../common/components/AppLayout';
 import { fetchUserMentees } from '../../services/mentees/actions';
-import { Button, Dimmer, Header, Icon, Loader, Message, Table } from 'semantic-ui-react';
+import { Dimmer, Header, Icon, Loader, Message, Table } from 'semantic-ui-react';
 
 class Mentees extends React.Component {
   componentDidMount () {
