@@ -62,7 +62,7 @@ const schemas = {
   line: {
     'type': 'string',
     'maxLength': 32,
-    'pattern': '^[a-zA-Z0-9@_]+$',
+    'pattern': '^[a-zA-Z0-9@!#*+=/.,<>?~_-]+$',
     'errorMessage': 'Username LINE hanya boleh mengandung karakter alfanumerik, @ dan underscore (_)'
   },
 
