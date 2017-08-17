@@ -110,7 +110,7 @@ export function addInteractionParticipant (interactionId, studentId) {
     endpoint: '/api/interactions/' + (+interactionId) + '/participants',
     body: {student_id: +studentId},
     method: 'POST',
-    types: [ADD_INTERACTION_PARTICIPANT_REQUEST, ADD_INTERACTION_MENTOR_SUCCESS, ADD_INTERACTION_PARTICIPANT_FAILURE]
+    types: [ADD_INTERACTION_PARTICIPANT_REQUEST, ADD_INTERACTION_PARTICIPANT_SUCCESS, ADD_INTERACTION_PARTICIPANT_FAILURE]
   });
 }
 

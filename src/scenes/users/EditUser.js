@@ -1,11 +1,12 @@
 import React from 'react';
-import { Button, Select, Icon, Modal, Form, Message } from 'semantic-ui-react';
+import { Button, Tab, Select, Icon, Modal, Form, Message } from 'semantic-ui-react';
 import ControlledField from '../../common/components/ControlledField';
 import { reduxForm, SubmissionError } from 'redux-form';
 import { userRoles, userStatuses } from '../../common/constants';
 import commonSchemas from '../../common/schemas';
 import { createValidator } from '../../common/validation';
 import { updateUser } from '../../services/users/actions';
+import UserMenteeList from './UserMenteeList';
 
 export const EDIT_USER_FORM = 'editUser';
 
@@ -13,25 +14,32 @@ class EditUser extends React.Component {
   render () {
     const {open, onClose, readOnlyValues, pristine, submitting, error, handleSubmit} = this.props;
     return (
-      <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='mini'>
+      <Modal open={open} closeOnDimmerClick={false} onClose={onClose} closeIcon='close' size='tiny'>
         <Modal.Header>Edit Akun - {readOnlyValues.username}</Modal.Header>
-        <Modal.Content>
-          <Modal.Description>
-            <Form onSubmit={handleSubmit(submit)} error={!!error}>
-              <ControlledField name='nim' label='NIM'/>
-              <ControlledField name='email' label='Email'/>
-              <ControlledField name='role' label='Jenis akun' fluid component={Select} options={userRoles}/>
-              <ControlledField name='status' label='Status akun' fluid component={Select} options={userStatuses}/>
-              <Message error>{error}</Message>
-            </Form>
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={onClose}>Batal</Button>
-          <Button primary disabled={pristine || submitting} loading={submitting} onClick={handleSubmit(submit)}>
-            Simpan <Icon name='right chevron'/>
-          </Button>
-        </Modal.Actions>
+        <Tab panes={[
+          {menuItem: 'Detail akun', render: () => <Tab.Pane>
+            <Modal.Content>
+              <Modal.Description>
+                <Form onSubmit={handleSubmit(submit)} error={!!error}>
+                  <ControlledField name='nim' label='NIM'/>
+                  <ControlledField name='email' label='Email'/>
+                  <ControlledField name='role' label='Jenis akun' fluid component={Select} options={userRoles}/>
+                  <ControlledField name='status' label='Status akun' fluid component={Select} options={userStatuses}/>
+                  <Message error>{error}</Message>
+                </Form>
+              </Modal.Description>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button onClick={onClose}>Batal</Button>
+              <Button primary disabled={pristine || submitting} loading={submitting} onClick={handleSubmit(submit)}>
+                Simpan <Icon name='right chevron'/>
+              </Button>
+            </Modal.Actions>
+          </Tab.Pane>},
+          {menuItem: 'Mentee', render: () => <Tab.Pane>
+            <UserMenteeList user={readOnlyValues}/>
+          </Tab.Pane>}
+        ]}/>
       </Modal>
     );
   }

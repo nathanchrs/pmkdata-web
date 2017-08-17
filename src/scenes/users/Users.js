@@ -42,9 +42,9 @@ class Users extends React.Component {
     this.setState({creatingUser: true});
   };
 
-  handleEditStart = ({username, nim, email, role, status}) => {
+  handleEditStart = ({id, username, nim, email, role, status}) => {
     this.props.initEditUserFormDispatcher({nim, email, role, status});
-    this.setState({editingUser: {username, nim, email, role, status}});
+    this.setState({editingUser: {id, username, nim, email, role, status}});
   };
 
   render () {
