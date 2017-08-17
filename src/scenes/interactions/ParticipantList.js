@@ -3,6 +3,7 @@ import { Button, Dimmer, Loader, Search, Divider, List } from 'semantic-ui-react
 import { fetchInteractionParticipants, addInteractionParticipant, removeInteractionParticipant }
   from '../../services/interactions/actions';
 import { searchStudents } from '../../services/students/actions';
+import { searchUserMentees } from '../../services/users/actions';
 import { connect } from 'react-redux';
 
 class ParticipantList extends React.Component {
@@ -34,7 +35,7 @@ class ParticipantList extends React.Component {
     this.setState({searchLoading: true, searchValue: value});
     if (value.length < 1) return this.resetComponent();
 
-    let results = await this.props.searchStudentsDispatcher(value);
+    let results = await this.props.searchUserMenteesDispatcher(this.props.user.id, value);
     results = results.map(({id, name, department, year}) => ({id, title: name, description: year + ' | ' + department}));
     this.setState({searchLoading: false, searchResults: results});
   };
@@ -57,7 +58,6 @@ class ParticipantList extends React.Component {
           </Dimmer>
           {this.state.participants.map(participant => (
             <List.Item key={participant.id}>
-              {this.state.participants.length > 1 &&
               <List.Content floated='right'>
                 <Button basic circular icon='trash' negative onClick={
                   async () => {
@@ -66,11 +66,10 @@ class ParticipantList extends React.Component {
                   }
                 }/>
               </List.Content>
-              }
               <List.Content>
                 <List.Header>{participant.name}</List.Header>
                 <List.Description>{
-                  (participant.year ? ' | ' + participant.year : '')
+                  (participant.year ? participant.year : '')
                   + (participant.department ? ' | ' + participant.department : '')
                 }</List.Description>
               </List.Content>
@@ -85,10 +84,22 @@ class ParticipantList extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    user: state.session.user
+  };
+};
+
+
 const mapDispatchToProps = dispatch => {
   return {
     searchStudentsDispatcher: async (search) => {
       let response = await dispatch(searchStudents(search));
+      if (response.error) return [];
+      return response.payload;
+    },
+    searchUserMenteesDispatcher: async (userId, search) => {
+      let response = await dispatch(searchUserMentees(userId, search));
       if (response.error) return [];
       return response.payload;
     },
@@ -104,4 +115,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ParticipantList);
+export default connect(mapStateToProps, mapDispatchToProps)(ParticipantList);

@@ -61,7 +61,6 @@ class UserMenteeList extends React.Component {
           </Dimmer>
           {this.state.mentees.map(mentee => (
             <List.Item key={mentee.id}>
-              {this.state.mentees.length > 1 &&
               <List.Content floated='right'>
                 <Button basic circular icon='trash' negative onClick={
                   async () => {
@@ -70,11 +69,10 @@ class UserMenteeList extends React.Component {
                   }
                 }/>
               </List.Content>
-              }
               <List.Content>
                 <List.Header>{mentee.name}</List.Header>
                 <List.Description>{
-                  (mentee.year ? ' | ' + mentee.year : '')
+                  (mentee.year ? mentee.year : '')
                   + (mentee.department ? ' | ' + mentee.department : '')
                 }</List.Description>
               </List.Content>
