@@ -1,4 +1,9 @@
 
-.App {
-  text-align: center;
+.no-bottom-margin {
+  margin-bottom: 0;
 }
+
+.full-width {
+  width: 100%;
+}
+

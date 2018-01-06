@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
 import './App.css';
+import Login from './scenes/session/Login'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Button type="primary">Button</Button>
+        <Login />
       </div>
     );
   }
