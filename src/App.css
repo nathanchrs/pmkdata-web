@@ -1,41 +1,4 @@
 
-/* Global app styles */
-
-body {
-  background-color: #f7f7f7;
-}
-
-/* Fixes to be able to use menu with labels in a 'very thin' sidebar */
-
-.ui.labeled.icon.menu .item {
-  min-width: 80px;
-}
-
-.ui.left.sidebar[class*="very thin"] {
-  width: 80px;
-}
-
-.pushable > .pusher {
-  min-width: 700px;
-  overflow-x: auto;
-}
-
-.ui.visible.overlay.sidebar ~ .fixed, .ui.visible.overlay.sidebar ~ .pusher {
-  margin-left: 80px;
-}
-
-.ui.input.error input, .ui.form .field.error textarea {
-  background: #fff6f6;
-  border-color: #e0b4b4;
-}
-
-.ui.search.fluid .ui.input {
-  width: 100%;
-}
-
-.field textarea {
-  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-  line-height: 1.21428571em;
-  padding: .67857143em 1em;
-  font-size: 1em;
+.App {
+  text-align: center;
 }
