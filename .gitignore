@@ -1,10 +1,9 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
-# Sublime Text files
+# IDE files
 *.sublime-*
-
-# IntelliJ IDEA files
 /.idea
+/.vscode
 
 # dependencies
 /node_modules
