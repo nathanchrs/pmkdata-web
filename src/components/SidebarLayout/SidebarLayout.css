@@ -1,0 +1,29 @@
+.sidebarlayout-brand {
+  padding: 14px 16px;
+  background-color: #0a0a0a;
+}
+
+.sidebarlayout-brand img {
+  height: 36px;
+  display: block;
+  margin: 0 auto;
+}
+
+.sidebarlayout-header {
+  background-color: #fff;
+  padding: 0 16px;
+}
+
+.sidebarlayout-content {
+  margin: 0 16px;
+}
+
+.sidebarlayout-breadcrumb {
+  margin: 16px 0;
+}
+
+.sidebarlayout-content-container {
+  padding: 24px;
+  background-color: #fff;
+  min-height: 360px;
+}
