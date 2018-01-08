@@ -3,44 +3,46 @@ import PropTypes from 'prop-types';
 import { Breadcrumb, Icon, Layout } from 'antd';
 import WindowSizeListener from 'react-window-size-listener';
 import SidebarMenu from './SidebarMenu';
-import ui from 'redux-ui';
 import './SidebarLayout.css';
 import pmkLogo from '../../resources/pmklogo.png';
 
 class SidebarLayout extends Component {
+  state = {
+    collapsed: false
+  };
+
   toggleSidebar = () => {
-    this.props.updateUI({ collapsed: !this.props.ui.collapsed });
+    this.setState({ collapsed: !this.state.collapsed });
   };
 
   handleResponsiveSidebar = windowSize => {
-    this.props.updateUI({ collapsed: windowSize.windowWidth < this.props.breakpointWidth });
+    this.setState({ collapsed: windowSize.windowWidth < this.props.breakpointWidth });
   };
 
   render() {
-    const { ui, breadcrumbLinks, selectedMenuKey, title } = this.props;
     return (
       <Layout className="full-height">
         <WindowSizeListener onResize={this.handleResponsiveSidebar} />
 
-        <Layout.Sider collapsible collapsed={ui.collapsed} trigger={null}>
+        <Layout.Sider collapsible collapsed={this.state.collapsed} trigger={null}>
           <div className="sidebarlayout-brand"><img src={pmkLogo} alt="" /></div>
-          <SidebarMenu selectedMenuKey={selectedMenuKey} />
+          <SidebarMenu selectedMenuKey={this.props.selectedMenuKey} />
         </Layout.Sider>
 
         <Layout>
           <Layout.Header className="sidebarlayout-header">
             <Icon
               className="trigger"
-              type={ui.collapsed ? 'menu-unfold' : 'menu-fold'}
+              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggleSidebar}
             />
-            <h1>{title}</h1>
+            <h1>{this.props.title}</h1>
           </Layout.Header>
 
           <Layout.Content className="sidebarlayout-content">
-            {breadcrumbLinks ?
+            {this.props.breadcrumbLinks ?
               <Breadcrumb className="sidebarlayout-breadcrumb">
-                {breadcrumbLinks.map(link => 
+                {this.props.breadcrumbLinks.map(link => 
                   <Breadcrumb.Item>{link}</Breadcrumb.Item>
                 )}
               </Breadcrumb>
@@ -73,11 +75,4 @@ SidebarLayout.propTypes = {
   title: PropTypes.string
 };
 
-const uiConfig = {
-  persist: true,
-  state: {
-    collapsed: false
-  }
-};
-
-export default ui(uiConfig)(SidebarLayout);
+export default SidebarLayout;

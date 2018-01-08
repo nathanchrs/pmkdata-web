@@ -16,7 +16,6 @@
     "ajv-errors": "^1.0.0",
     "antd": "^3.1.0",
     "babel-plugin-import": "^1.6.3",
-    "immutable": "^3.8.2",
     "moment": "^2.20.1",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
@@ -24,12 +23,12 @@
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
     "react-scripts": "1.0.17",
     "react-window-size-listener": "^1.0.10",
     "redux": "^3.7.2",
     "redux-form": "^7.2.0",
-    "redux-persist": "^5.4.0",
-    "redux-ui": "^0.1.1"
+    "redux-persist": "^5.4.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
