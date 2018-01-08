@@ -14,3 +14,11 @@
 .center-text {
   text-align: center;
 }
+
+.toggle-icon-inactive {
+  color: #aaa;
+}
+
+.toggle-icon-active {
+  color: #108ee9;
+}

@@ -4,6 +4,7 @@ import moment from 'moment';
 import { displayDateTimeFormat } from '../../common/constants';
 import './Users.css';
 import SidebarLayout from '../../components/SidebarLayout/SidebarLayout';
+import SearchFilterDropdown from '../../components/SearchFilterDropdown/SearchFilterDropdown';
 
 const userStatusBadges = {
   active: <Badge status="success" text="Aktif" />,
@@ -12,10 +13,17 @@ const userStatusBadges = {
 };
 
 class UsersList extends Component {
-  render() {
+  state = {
+    usernameFilterDropdownVisible: false
+  }
 
+  render() {
     const columns = [
-      { title: 'Username', dataIndex: 'username', key: 'username' },
+      { title: 'Username', dataIndex: 'username', key: 'username',
+        filterDropdown: <SearchFilterDropdown />,
+        filterDropdownVisible: this.state.usernameFilterDropdownVisible,
+        onFilterDropdownVisibleChange: visible => this.setState({ usernameFilterDropdownVisible: visible })
+      },
       { title: 'NIM', dataIndex: 'nim', key: 'nim' },
       { title: 'Nama', dataIndex: 'name', key: 'name' },
       { title: 'Email', dataIndex: 'email', key: 'email' },
@@ -28,14 +36,18 @@ class UsersList extends Component {
     ];
 
     const sampleData = [
-      { key: 1, username: 'nathanchrs', name: 'Nathan', nim: 13515001, email: 'nathanchrs@nathanchrs.com', status: 'awaiting_validation' }
+      { key: 1, username: 'nathanchrs', name: 'Nathan', nim: 13515001, email: 'nathanchrs@nathanchrs.com', status: 'awaiting_validation' },
+      { key: 3, username: 'user1', name: 'User 1', nim: 13515003, email: 'nathanchrsz3@nathanchrs.com', status: 'active' },
+      { key: 2, username: 'admin', name: 'Administrator', nim: 13515002, email: 'nathanchrs2a@nathanchrs.com', status: 'disabled' }
     ];
 
     return (
       <SidebarLayout title="Akun" selectedMenuKey="users-list">
-        
-        <Table columns={columns} dataSource={sampleData} scroll={{ x: 1000 }} />
-
+        <Table
+          columns={columns}
+          dataSource={sampleData}
+          scroll={{ x: 1000 }}
+        />
       </SidebarLayout>
     );
   }
