@@ -38,7 +38,7 @@ class SidebarLayout extends Component {
           </Layout.Content>
 
           <Layout.Footer className="center-text">
-            Data PMK ITB
+            Persekutuan Mahasiswa Kristen ITB
           </Layout.Footer>
         </Layout>
       </Layout>

@@ -1,5 +1,5 @@
 
-export const userStatuses = [
+export const userStatus = [
   { key: 'active', value: 'active', text: 'Aktif' },
   { key: 'awaiting_validation', value: 'awaiting_validation', text: 'Menunggu validasi' },
   { key: 'disabled', value: 'disabled', text: 'Tidak aktif' }

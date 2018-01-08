@@ -16,6 +16,7 @@
     "ajv-errors": "^1.0.0",
     "antd": "^3.1.0",
     "babel-plugin-import": "^1.6.3",
+    "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-app-rewired": "^1.4.0",
     "react-dom": "^16.2.0",
