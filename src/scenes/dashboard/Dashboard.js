@@ -5,7 +5,7 @@ import SidebarLayout from '../../components/SidebarLayout/SidebarLayout';
 class Dashboard extends Component {
   render() {
     return (
-      <SidebarLayout title="Dashboard">
+      <SidebarLayout title="Dashboard" selectedMenuKey="dashboard">
         Test
       </SidebarLayout>
     );

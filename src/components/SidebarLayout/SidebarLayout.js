@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Layout } from 'antd';
+import { Breadcrumb, Icon, Layout } from 'antd';
 import SidebarMenu from './SidebarMenu';
 import './SidebarLayout.css';
 import pmkLogo from '../../resources/pmklogo.png';
@@ -9,20 +9,25 @@ class SidebarLayout extends Component {
     collapsed: false
   };
 
-  onCollapse = collapsed => {
-    this.setState({ collapsed });
+  toggleSidebar = () => {
+    this.setState({ collapsed: !this.state.collapsed });
   };
 
   render() {
     return (
       <Layout className="full-height">
-        <Layout.Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+        <Layout.Sider collapsible collapsed={this.state.collapsed} trigger={null}>
           <div className="sidebarlayout-brand"><img src={pmkLogo} alt="" /></div>
-          <SidebarMenu />
+          <SidebarMenu selectedMenuKey={this.props.selectedMenuKey} />
         </Layout.Sider>
 
         <Layout>
           <Layout.Header className="sidebarlayout-header">
+            <Icon
+              className="trigger"
+              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+              onClick={this.toggleSidebar}
+            />
             <h1>{this.props.title}</h1>
           </Layout.Header>
 

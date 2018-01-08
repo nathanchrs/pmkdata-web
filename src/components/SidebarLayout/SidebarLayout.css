@@ -14,8 +14,14 @@
   padding: 0 16px;
 }
 
+.sidebarlayout-header .trigger {
+  font-size: 1.4em;
+}
+
 .sidebarlayout-header h1 {
-  font-size: 1.6em;
+  font-size: 1.4em;
+  display: inline-block;
+  margin-left: 16px;
 }
 
 .sidebarlayout-content {
@@ -29,4 +35,8 @@
 .sidebarlayout-content-container {
   padding: 24px;
   background-color: #fff;
+}
+
+.ant-menu-item > a {
+  display: inline-block;
 }

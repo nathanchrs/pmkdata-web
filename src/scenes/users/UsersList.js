@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Badge, Divider, Icon, Table } from 'antd';
+import { Badge, Table } from 'antd';
 import moment from 'moment';
 import { displayDateTimeFormat } from '../../common/constants';
 import './Users.css';
@@ -32,7 +32,7 @@ class UsersList extends Component {
     ];
 
     return (
-      <SidebarLayout title="Akun">
+      <SidebarLayout title="Akun" selectedMenuKey="users-list">
         
         <Table columns={columns} dataSource={sampleData} scroll={{ x: 1000 }} />
 
