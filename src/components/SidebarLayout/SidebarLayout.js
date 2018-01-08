@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Icon, Layout } from 'antd';
+import WindowSizeListener from 'react-window-size-listener';
 import SidebarMenu from './SidebarMenu';
 import './SidebarLayout.css';
 import pmkLogo from '../../resources/pmklogo.png';
@@ -13,9 +14,15 @@ class SidebarLayout extends Component {
     this.setState({ collapsed: !this.state.collapsed });
   };
 
+  handleResponsiveSidebar = windowSize => {
+    this.setState({ collapsed: windowSize.windowWidth < this.props.breakpointWidth });
+  };
+
   render() {
     return (
       <Layout className="full-height">
+        <WindowSizeListener onResize={this.handleResponsiveSidebar} />
+
         <Layout.Sider collapsible collapsed={this.state.collapsed} trigger={null}>
           <div className="sidebarlayout-brand"><img src={pmkLogo} alt="" /></div>
           <SidebarMenu selectedMenuKey={this.props.selectedMenuKey} />
@@ -32,10 +39,15 @@ class SidebarLayout extends Component {
           </Layout.Header>
 
           <Layout.Content className="sidebarlayout-content">
-            <Breadcrumb className="sidebarlayout-breadcrumb">
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
+            {this.props.breadcrumbLinks ?
+              <Breadcrumb className="sidebarlayout-breadcrumb">
+                {this.props.breadcrumbLinks.map(link => 
+                  <Breadcrumb.Item>{link}</Breadcrumb.Item>
+                )}
+              </Breadcrumb>
+              :
+              <br />
+            }
 
             <div className="sidebarlayout-content-container">
               {this.props.children}
@@ -50,5 +62,9 @@ class SidebarLayout extends Component {
     );
   }
 }
+
+SidebarLayout.defaultProps = {
+  breakpointWidth: 800
+};
 
 export default SidebarLayout;

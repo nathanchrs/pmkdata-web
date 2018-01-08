@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 class SidebarMenu extends Component {
   render() {
-    console.log(this.props.selectedMenuKey);
     return (
       <Menu theme="dark" selectedKeys={[this.props.selectedMenuKey]} mode="inline">
         <Menu.Item key="dashboard">
@@ -25,7 +24,7 @@ class SidebarMenu extends Component {
           <Menu.Item key="interactions-kelasagama2018ganjil">Kelas Agama 2018 (ganjil)</Menu.Item>
         </Menu.SubMenu>
         <Menu.Item key="publications">
-          <Link to="/"><Icon type="video-camera" /><span>Publikasi</span></Link>
+          <Link to="/publications"><Icon type="video-camera" /><span>Publikasi</span></Link>
         </Menu.Item>
         <Menu.SubMenu
           key="books"
