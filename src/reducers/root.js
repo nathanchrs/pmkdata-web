@@ -1,10 +1,15 @@
-import { combineReducers } from 'redux';
+import { persistCombineReducers } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { reducer as reduxUiReducer } from 'redux-ui';
 import { reducer as reduxFormReducer } from 'redux-form';
 
 export const RESET_REDUX_STATE = 'RESET_REDUX_STATE';
 
-const appReducer = combineReducers({
-  form: reduxFormReducer
+const persistConfig = { key: 'pmkdata', storage, blacklist: [], debug: true };
+
+const appReducer = persistCombineReducers(persistConfig, {
+  form: reduxFormReducer,
+  ui: reduxUiReducer  
 });
 
 const rootReducer = (state, action) => {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Icon, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 
@@ -53,5 +54,9 @@ class SidebarMenu extends Component {
     );
   }
 }
+
+SidebarMenu.propTypes = {
+  selectedMenuKey: PropTypes.string
+};
 
 export default SidebarMenu;
