@@ -1,18 +1,18 @@
 
 export function getSortQuery(sortArray) {
-    if (!sortArray) return undefined;
-    let sortQuery = '';
-    for (let i = 0; i < sortArray.length; i++) {
-        sortQuery = sortQuery + (sortArray[0].direction === 'ascending' ? '' : '-') + sortArray[0].field;
-    }
-    return sortQuery;
+  if (!sortArray) return undefined;
+  let sortQuery = '';
+  for (let i = 0; i < sortArray.length; i++) {
+    sortQuery = sortQuery + (sortArray[0].direction === 'ascending' ? '' : '-') + sortArray[0].field;
+  }
+  return sortQuery;
 }
 
 export function getFirstSortDirection(sortArray, field) {
-    if (!sortArray || sortArray.length <= 0 || !sortArray[0] || sortArray[0].field !== field) return null;
-    return sortArray[0].direction;
+  if (!sortArray || sortArray.length <= 0 || !sortArray[0] || sortArray[0].field !== field) return null;
+  return sortArray[0].direction;
 }
 
 export function enumText(enums, value) {
-    return enums.find(item => item.value === value).text;
+  return enums.find(item => item.value === value).text;
 }
