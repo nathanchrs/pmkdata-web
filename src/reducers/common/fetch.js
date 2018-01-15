@@ -1,12 +1,13 @@
+import keyBy from 'lodash.keyby';
 
 export const fetchDefaultState = { data: {}, error: {} };
 export const filterDefaultState = { filters: {} };
-export const sortDefaultState = { sort: {} };
+export const sortDefaultState = { sort: [] };
 export const paginationDefaultState = { page: 1, perPage: 20 };
 
-export function fetchSuccessReducer (state = fetchDefaultState, action) {
+export function fetchSuccessReducer (state = fetchDefaultState, action, key = 'id') {
   return {
-    data: action.payload.data,
+    data: keyBy(action.payload.data, key),
     filters: action.payload.filters,
     sort: action.payload.sort,
     page: action.payload.page,

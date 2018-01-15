@@ -2,8 +2,7 @@ import { reducer as reduxFormReducer } from 'redux-form';
 import { persistCombineReducers } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import userReducer from './users';
-
-export const RESET_REDUX_STATE = 'RESET_REDUX_STATE';
+import { RESET_REDUX_STATE } from '../actions/global';
 
 const persistConfig = { key: 'pmkdata', storage, debug: true };
 

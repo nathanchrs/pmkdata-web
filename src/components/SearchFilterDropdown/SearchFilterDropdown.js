@@ -8,9 +8,17 @@ class SearchFilterDropdown extends Component {
     searchText: ''
   }
 
-  componentDidMount() {
-    this.setState({ searchText: this.props.initialValue });
+  componentWillReceiveProps(nextProps) {
+    // Reset search input and mark input for focusing when the dropdown is shown.
+    if (!this.props.visible && nextProps.visible) {
+      this.setState({ searchText: this.props.initialValue }, () => {
+        // Focus on the search box afterwards.
+        this.inputRef && this.inputRef.focus();
+      });
+    }
   }
+
+  handleFilter = e => this.props.onFilter({[this.props.dataIndex]: this.state.searchText });
 
   onInputChange = e => {
     this.setState({ searchText: e.target.value });
@@ -20,14 +28,14 @@ class SearchFilterDropdown extends Component {
     return (
       <div className="search-filter-dropdown">
         <Input
-          autoFocus
           placeholder={this.props.placeholder}
           value={this.state.searchText}
           onChange={this.onInputChange}
-          onPressEnter={this.onSearch}
+          onPressEnter={this.handleFilter}
+          ref={el => this.inputRef = el}
         />
-        <Button type="primary" onClick={this.onSearch}>
-          <Icon type="search" />
+        <Button type="primary" onClick={this.handleFilter} loading={this.props.loading}>
+          <Icon type={this.props.loading ? "loading" : "search"}/>
         </Button>
       </div>
     );
@@ -35,9 +43,12 @@ class SearchFilterDropdown extends Component {
 }
 
 SearchFilterDropdown.propTypes = {
+  dataIndex: PropTypes.string.isRequired,
+  onFilter: PropTypes.func.isRequired,
   initialValue: PropTypes.string,
+  loading: PropTypes.bool,
   placeholder: PropTypes.string,
-  onSearch: PropTypes.func.isRequired
+  visible: PropTypes.bool
 };
 
 export default SearchFilterDropdown;

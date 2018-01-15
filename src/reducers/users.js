@@ -14,7 +14,7 @@ const defaultState = Object.assign(
 export default function userReducer (state = defaultState, action) {
   switch (action.type) {
     case FETCH_USERS_SUCCESS:
-      return fetchSuccessReducer(state, action);
+      return fetchSuccessReducer(state, action, 'username');
     case FETCH_USERS_FAILURE:
       return fetchFailureReducer(state, action);
     

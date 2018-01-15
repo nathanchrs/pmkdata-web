@@ -1,4 +1,9 @@
 
+export const sortDirections = [
+  { key: 'ascending', value: 'ascending', text: 'Menaik' },
+  { key: 'descending', value: 'descending', text: 'Menurun' }
+];
+
 export const userStatus = [
   { key: 'active', value: 'active', text: 'Aktif' },
   { key: 'awaiting_validation', value: 'awaiting_validation', text: 'Menunggu validasi' },
@@ -30,3 +35,5 @@ export const displayTimeFormat = 'HH:mm';
 export const displayDateTimeFormat = displayDateFormat + ' ' + displayTimeFormat;
 export const storeDateFormat = 'YYYY-MM-DD';
 export const storeDateTimeFormat = 'YYYY-MM-DDTHH:mm:ssZ';
+
+export const apiEndpointPrefix = '/api';
