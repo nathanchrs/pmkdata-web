@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logout } from '../../actions/session';
 
 class SidebarMenu extends Component {
+  handleMenuClick = async ({ item, key, keyPath }) => {
+    switch (key) {
+      case 'logout':
+        await this.props.logoutDispatcher();
+        this.props.history.push('/login');
+        break;
+      default:
+    }
+    
+  }
+
   render() {
+    const { username, selectedMenuKey } = this.props;
     return (
-      <Menu theme="dark" selectedKeys={[this.props.selectedMenuKey]} mode="inline">
+      <Menu theme="dark" selectedKeys={[selectedMenuKey]} mode="inline" onClick={this.handleMenuClick}>
         <Menu.Item key="dashboard">
           <Link to="/"><Icon type="appstore-o" /><span>Dashboard</span></Link>
         </Menu.Item>
@@ -47,7 +61,7 @@ class SidebarMenu extends Component {
         >
           <Menu.Item key="users-list"><Link to="/users">Daftar akun</Link></Menu.Item>
           <Menu.Item key="users-privileges"><Link to="/privileges"><span>Hak akses</span></Link></Menu.Item>
-          <Menu.Item key="users-profile"><Link to="/profile"><span>Pengaturan</span></Link></Menu.Item>
+          <Menu.Item key="users-profile"><Link to="/profile"><span>{username}</span></Link></Menu.Item>
           <Menu.Item key="logout">Logout</Menu.Item>
         </Menu.SubMenu>
       </Menu>
@@ -59,4 +73,16 @@ SidebarMenu.propTypes = {
   selectedMenuKey: PropTypes.string
 };
 
-export default SidebarMenu;
+const mapStateToProps = state => {
+  return {
+    username: state.session.user && state.session.user.username
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logoutDispatcher: () => dispatch(logout())
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SidebarMenu));

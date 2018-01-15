@@ -9,13 +9,14 @@ import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import registerServiceWorker from './registerServiceWorker';
+import thunk from 'redux-thunk';
 import { apiMiddleware } from 'redux-api-middleware';
 import logoutOnUnauthorizedError from './middleware/logoutOnUnauthorizedError';
 
 moment.locale('id');
 
 const store = createStore(rootReducer, applyMiddleware(
-  apiMiddleware, logoutOnUnauthorizedError
+  thunk, apiMiddleware, logoutOnUnauthorizedError
 ));
 const persistor = persistStore(store);
 

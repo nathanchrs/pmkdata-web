@@ -22,3 +22,8 @@
 .toggle-icon-active {
   color: #108ee9;
 }
+
+.ant-form-explain, .ant-form-extra {
+  margin-top: 4px !important;
+  margin-bottom: 1em;
+}

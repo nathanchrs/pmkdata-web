@@ -89,7 +89,7 @@ const schemas = {
 
   password: {
     'type': 'string',
-    'minLength': 6,
+    'minLength': 5,
     'maxLength': 255,
     'errorMessage': 'Password minimal sepanjang 6 karakter'
   },
