@@ -28,7 +28,7 @@ class UsersList extends Component {
   }
 
   componentDidMount() {
-    this.handleFetchUsers();
+    this.handleFetchUsers(this.props.params);
   }
 
   render() {

@@ -34,6 +34,9 @@ export function createApiAction(options) {
   apiAction.endpoint = apiEndpointPrefix + apiAction.endpoint;
 
   if (apiAction.query !== null && typeof apiAction.query === 'object') {
+    for (let key in apiAction.query) {
+      if (apiAction.query[key] === {} || apiAction.query[key] === '') delete apiAction.query[key];
+    }
     apiAction.endpoint = [
       apiAction.endpoint.replace(/\?*/, ''),
       qs.stringify(apiAction.query)
