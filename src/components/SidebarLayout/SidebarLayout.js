@@ -26,7 +26,7 @@ class SidebarLayout extends Component {
 
         <Layout.Sider collapsible collapsed={this.state.collapsed} trigger={null}>
           <div className="sidebarlayout-brand"><img src={pmkLogo} alt="" /></div>
-          <SidebarMenu selectedMenuKey={this.props.selectedMenuKey} />
+          <SidebarMenu selectedMenuKey={this.props.selectedMenuKey} collapsed={this.state.collapsed} />
         </Layout.Sider>
 
         <Layout>

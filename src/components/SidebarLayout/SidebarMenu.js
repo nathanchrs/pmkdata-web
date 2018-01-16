@@ -18,9 +18,9 @@ class SidebarMenu extends Component {
   }
 
   render() {
-    const { username, selectedMenuKey } = this.props;
+    const { username, selectedMenuKey, collapsed } = this.props;
     return (
-      <Menu theme="dark" selectedKeys={[selectedMenuKey]} mode="inline" onClick={this.handleMenuClick}>
+      <Menu theme="dark" selectedKeys={[selectedMenuKey]} mode="inline" inlineCollapsed={collapsed} onClick={this.handleMenuClick}>
         <Menu.Item key="dashboard">
           <Link to="/"><Icon type="appstore-o" /><span>Dashboard</span></Link>
         </Menu.Item>
@@ -28,8 +28,8 @@ class SidebarMenu extends Component {
           key="students"
           title={<span><Icon type="contacts" /><span>Anggota</span></span>}
         >
-          <Menu.Item key="students-active"><Link to="/students"><span>Anggota aktif</span></Link></Menu.Item>
-          <Menu.Item key="students-alumni"><Link to="/alumni"><span>Alumni</span></Link></Menu.Item>
+          <Menu.Item key="students-active"><Link to="/students">Anggota aktif</Link></Menu.Item>
+          <Menu.Item key="students-alumni"><Link to="/alumni">Alumni</Link></Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
           key="interactions"
@@ -45,23 +45,23 @@ class SidebarMenu extends Component {
           key="books"
           title={<span><Icon type="book" /><span>Buku</span></span>}
         >
-          <Menu.Item key="books-catalog"><Link to="/books"><span>Katalog</span></Link></Menu.Item>
-          <Menu.Item key="books-loans"><Link to="/books/loans"><span>Peminjaman</span></Link></Menu.Item>
+          <Menu.Item key="books-catalog"><Link to="/books">Katalog</Link></Menu.Item>
+          <Menu.Item key="books-loans"><Link to="/books/loans">Peminjaman</Link></Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
           key="equipment"
           title={<span><Icon type="tool" /><span>Perlengkapan</span></span>}
         >
-          <Menu.Item key="equipment-inventory"><Link to="/equipment"><span>Daftar barang</span></Link></Menu.Item>
-          <Menu.Item key="equipment-loans"><Link to="/equipment/loans"><span>Peminjaman</span></Link></Menu.Item>
+          <Menu.Item key="equipment-inventory"><Link to="/equipment">Daftar barang</Link></Menu.Item>
+          <Menu.Item key="equipment-loans"><Link to="/equipment/loans">Peminjaman</Link></Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu
           key="users"
           title={<span><Icon type="idcard" /><span>Akun</span></span>}
         >
           <Menu.Item key="users-list"><Link to="/users">Daftar akun</Link></Menu.Item>
-          <Menu.Item key="users-privileges"><Link to="/privileges"><span>Hak akses</span></Link></Menu.Item>
-          <Menu.Item key="users-profile"><Link to="/profile"><span>{username}</span></Link></Menu.Item>
+          <Menu.Item key="users-privileges"><Link to="/privileges">Hak akses</Link></Menu.Item>
+          <Menu.Item key="users-profile"><Link to="/profile">{username}</Link></Menu.Item>
           <Menu.Item key="logout">Logout</Menu.Item>
         </Menu.SubMenu>
       </Menu>
